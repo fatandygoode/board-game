@@ -5,6 +5,13 @@ import static utils.ScannerInput.*;
 import models.Board;
 import models.Player;
 
+/**
+ * Create a game from the terminal and allow users to play in accordance with the rules
+ * 
+ * @author John Madden (w20077700), Brian O'Sullivan, Patrick Kiely, Seán Mundy.
+ * @version 2017-03-20
+ */
+
 public class MenuController
 {
     private Scanner input; 
