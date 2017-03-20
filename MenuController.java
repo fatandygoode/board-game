@@ -8,7 +8,7 @@ import models.Player;
 /**
  * Create a game from the terminal and allow users to play in accordance with the rules
  * 
- * @author John Madden (w20077700), Brian O'Sullivan, Patrick Kiely, Seán Mundy.
+ * @author John Madden, Brian O'Sullivan, Patrick Kiely, Seán Mundy.
  * @version 2017-03-20
  */
 
@@ -132,7 +132,9 @@ public class MenuController
         System.out.println("Exiting... bye");
         System.exit(0);
 	}
-    
+//===========================================================
+    //helper methods, may be merged
+/============================================================
     /**
      * Method to begin the game
      */
