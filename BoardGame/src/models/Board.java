@@ -33,7 +33,7 @@ public class Board
         String list = "";
         for (int index = 0; index < players.size(); index++)
         {
-        	list = list + index + " - " + players.get(index).getPlayerName() + "\n";
+        	list = "\n" + list + index + " - " + players.get(index).getPlayerName() + "\n";
         }
         if (list.equals(""))
         {

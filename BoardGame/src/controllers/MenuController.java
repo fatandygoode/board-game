@@ -1,9 +1,9 @@
 package controllers;
 
-import java.util.Scanner;
 import static utils.ScannerInput.*;
 import models.Board;
-import models.Player;// test
+import models.Player;
+
 /**
  * Create a game from the terminal and allow users to play in accordance with the rules
  * 
@@ -14,9 +14,9 @@ import models.Player;// test
  */
 public class MenuController
 {
-    private Scanner input; 
     private Board board; //creates new game
     private int turnCounter; //keeps track of whose turn it is
+    private boolean gameHasStarted;
     
     public static void main(String[] args)
     {
@@ -28,11 +28,12 @@ public class MenuController
      */
     public MenuController()
     {
-    	input = new Scanner(System.in);
     	board = new Board();
     	turnCounter = 0;
+    	gameHasStarted = false;
     	runMenu();
     }
+    
     /**
      * mainMenu() - This method displays the menu for the application, 
      * reads the menu option that the user entered and returns it.
@@ -41,7 +42,7 @@ public class MenuController
      */
     private int mainMenu()
     { 
-        System.out.println("Board Game Menu");
+        System.out.println("\nBoard Game Menu");
         System.out.println("---------");     
         System.out.println("  1) Add a player");    
         System.out.println("  2) List all players");
@@ -54,82 +55,87 @@ public class MenuController
         int option = validNextInt("==>> "); //ScannerInput class
         return option;
     }
+    
     /**
      * This is the method that controls the loop.
      */
     private void runMenu()
     {
         int option = mainMenu();
-        while (option != 0 || option != 5) //0 to exit, 5 to begin the game
+        while (option != 0)
         {  
+        	
             switch (option)
             {
                 case 1:
                 	if(board.numberOfPlayers() < 6) //can't add more than 6 players
                 	{
-	                	System.out.println("Enter the player name...\n");
-	                    String playerName = input.nextLine();
+	                    String playerName = validNextString("\nEnter the player name...\n");
 	                    board.add(new Player(playerName));
-	                    System.out.println(playerName + " added to the game");
-	                    //pause the program so that the user can read what we just printed to the terminal window
-	        			System.out.println("\nPress any key to continue...");
-	        			input.nextLine();
+	                    System.out.println("\n" + playerName + " added to the game\n");
                 	}
                 	else
                 	{
-                		System.out.println("Maximum 6 players, please remove a player first");
+                		System.out.println("\nMaximum 6 players, please remove a player first\n");
                 	}
-	                    break;           
+	                    break;
+	                    
                 case 2:
                     System.out.println(board.listPlayers());
-                    System.out.println("Total: " + board.numberOfPlayers());
+                    System.out.println("\nTotal: " + board.numberOfPlayers() + "\n");
 
-                    break;
+                    	break;
+                    	
                 case 3:    
                     System.out.println(board.listPlayers());
                     if (board.numberOfPlayers() > 0)
                     {
-                        System.out.print("Please enter the index for the player you wish to edit: ");
-                        int index = validNextInt("");
+                        int index = validNextInt("\nPlease enter the index for the player you wish to edit: ");
             			Player playerToUpdate = board.get(index);
-                        System.out.print(playerToUpdate.getPlayerName());
-                        System.out.print("\nEnter the new name: ");
-                        String newName = input.nextLine();
+
+                        String newName = validNextString("\nEnter the new name for " + playerToUpdate.getPlayerName() + ": ");
                         playerToUpdate.setPlayerName(newName);
                     }
                     break;
+                    
                 case 4:    
                     System.out.println(board.listPlayers());
                     if (board.numberOfPlayers() > 0)
                     {
-                        System.out.print("Please enter the index of the player you wish to delete: ");
-                        int index = validNextInt("");
+                        int index = validNextInt("\nPlease enter the index of the player you wish to delete: ");
+                        System.out.println("\n" + board.get(index).getPlayerName() + " removed from the game");
                         board.remove(index);
                     }
                     break;
+                    
                 case 5:
                 	if(board.numberOfPlayers() > 1) //need at least 2 players
                 	{
+                		gameHasStarted = true;
                 		beginGame();
                 	}
                 	else
                 	{
-                		System.out.println("You need to add between 2 and 6 players to begin the game");
+                		System.out.println("\nYou need to add between 2 and 6 players to begin the game");
                 	}
                 	break;
+                	
                 default:   
-                    System.out.println("Invalid option entered: " + option);
+                    System.out.println("\nInvalid option entered: " + option);
                     break;
             }
-          //pause the program so that the user can read what we just printed to the terminal window
-			System.out.println("\nPress any key to continue...");
-			input.nextLine();
-			
+            
+            pause();
+            
 			//display the main menu again if not starting game
-			option = mainMenu();
+            if(gameHasStarted == false)
+			{
+            	option = mainMenu();
+			}
+			
         }
         //the user chose option 0, so exit the program
-        System.out.println("Exiting... bye");
+        System.out.println("\nExiting... bye");
         System.exit(0);
 	}
     
@@ -138,17 +144,17 @@ public class MenuController
      */
     private void beginGame()
     {
-    	System.out.println("\nWelcome\n");
-    	if(board.numberOfPlayers() == 2)
-    	{
-    		for(Player player : board.players)
-    		{
-    			player.setNumberOfCarrots(95); // adjustment for 2 player game
-    		}	
-    	}
+    	System.out.println("<<=====>>\n");
+    	System.out.println("Welcome\n");
+    	System.out.println("<<=====>>\n");
+    	pause();
+    	//======================================
+    	//         TO DO
+    	//======================================
     	//enter rules depending on number of players
-    	
+    	//
     	//add an exit method to return to main menu
+    	//============================================
     	
     	playerTurn(); //starts next method to continue
     }
@@ -160,7 +166,7 @@ public class MenuController
     {
 		Player playerToMove = board.get(turnCounter);
         System.out.println("\n" + playerToMove.getPlayerName() + ", it's your turn\n");
-        
+        pause();
         displayStatus();
     }
     
@@ -168,11 +174,16 @@ public class MenuController
      * Method to display useful info for the next player to move
      */
     private void displayStatus()
-    {
+    {	
+    	//======================================
+    	//         TO DO
+    	//======================================
 		//display info e.g. current position, number of carrots/lettuces
     	//add options
     	//e.g. view full board, view list of available moves
     	//if no available moves return to start
+    	//======================================
+    	
     	Player playerToMove = board.get(turnCounter);
     	System.out.println("\nYour current postion is: " + playerToMove.getCurrentPosition() + "\n");
     	makeMove();
@@ -183,7 +194,10 @@ public class MenuController
      */
     private void makeMove()
     {
-		//display options
+    	//======================================
+    	//         TO DO
+    	//======================================
+    	//display options
     	//move forwards
     	//move back to tortioise
     	//draw carrots
@@ -191,6 +205,8 @@ public class MenuController
     	
     	//are you sure? this will use X carrots
     	//press * to confirm
+    
+    	//======================================
     	
     	
     	Player playerToMove = board.get(turnCounter);
@@ -199,12 +215,10 @@ public class MenuController
 		
 		int newPosition = validNextInt("");
 		playerToMove.setCurrentPosition(newPosition);
-		System.out.println("\n" + playerToMove.getPlayerName() + " moved to square #" + playerToMove.getCurrentPosition() + "!\n");
 		
-		//pause the program so that the user can read what we just printed to the terminal window
-		System.out.println("\nPress any key to continue...");
+		System.out.println("\n" + playerToMove.getPlayerName() + " moved to square #" + playerToMove.getCurrentPosition() + "!\n");
 		System.out.println("\n============================");
-		input.nextLine();
+		pause();
 		
     	nextPlayer();
     }
@@ -214,10 +228,33 @@ public class MenuController
      */
     private void nextPlayer()
     {
+    	//======================================
+    	//         TO DO
+    	//======================================
     	//take into account if a player is finished
+    	//======================================
     	
     	turnCounter++; //increment turn counter by 1
     	turnCounter = turnCounter % board.players.size(); //reset to zero after all players have played
     	playerTurn();
     }
+    
+    /**
+     * Helper method to insert a pause in the program
+     * @return "Press any key to continue"
+     */
+    private String pause()
+    {
+        return validNextString("\nPress any key to continue...\n");
+    }
+    
+    /**
+     * Helper method to return to the main menu
+     * 
+     */
+    private void menuReturn()
+    {
+        mainMenu();
+    }
 }
+
