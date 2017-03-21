@@ -3,7 +3,7 @@ package controllers;
 import java.util.Scanner;
 import static utils.ScannerInput.*;
 import models.Board;
-import models.Player;
+import models.Player;// test
 /**
  * Create a game from the terminal and allow users to play in accordance with the rules
  * 
