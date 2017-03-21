@@ -1,6 +1,6 @@
 package utils;
 
-import java.text.ParseException;
+//import java.text.ParseException;
 import java.util.Scanner;
 
 public class ScannerInput
@@ -41,7 +41,7 @@ public class ScannerInput
 			catch (Exception e)
 			{ 
 				input.nextLine(); //swallows the buffer contents
-				System.err.println("\tEnter a number please.");
+				System.err.println("\tError");
 			}
 		}
 		while (true);
