@@ -19,7 +19,6 @@ public class MenuController {
     private boolean gameInProgress; //changes main menu options if the game has begun
     private boolean turnComplete; //to facilitate nextPlayer method
     private boolean firstLaunch;
-    private boolean skipMainMenu;
     
     public static void main(String[] args) {
 		new MenuController();
@@ -69,6 +68,7 @@ public class MenuController {
      */
     private void runMenu() {
         int option = mainMenu();
+    	boolean skipMainMenu = false;
         while (option != 0) {// 0 to exit  
             switch (option) {
             	case 1:	
@@ -163,7 +163,7 @@ public class MenuController {
      * Method to run the game
      */
     private void runGame() {
-    	skipMainMenu = false;
+
     	if(firstLaunch) {
     	System.out.println("<<=====>>\n");
     	System.out.println("Welcome\n");
@@ -172,12 +172,10 @@ public class MenuController {
     	pause();
     	}
     	
+    	//display status
     	Player playerToMove = board.get(turnCounter);
         System.out.println("\n" + playerToMove.getPlayerName() + ", it's your turn\n");
-        pause();
-        
     	System.out.println(playerToMove.toString() + "\n");
-    	pause();
     	
     	makeMove(); //starts next method to continue
     }
@@ -211,9 +209,11 @@ public class MenuController {
     		break;
     	case 2:
     		System.out.println("\nNothing found\n");
+    		pause();
     		break;
     	case 3:
     		System.out.println("\nNothing found\n");
+    		pause();
     		break;
     	case 0:
     		runMenu();
@@ -246,14 +246,36 @@ public class MenuController {
     	
     	Player playerToMove = board.get(turnCounter);
 
-    	System.out.println("\nWhere do you want to move to? Enter square number: \n");
-		int newPosition = validNextInt("");
-		playerToMove.setBoardPosition(newPosition);
+		int newPosition = validNextInt("\nWhere do you want to move to? Enter square number: \n");
 		
-		System.out.println("\n" + playerToMove.getPlayerName() + " moved to square #" + playerToMove.getBoardPosition() + "!\n");
-		System.out.println("\n============================");
-		turnComplete = true;
-		pause();
+		int i = newPosition - playerToMove.getBoardPosition();
+		int carrotCost = 0;
+		while( i > 0 ) {
+			carrotCost = carrotCost + i;
+			i--;
+		}
+		if(carrotCost <= playerToMove.getNumberOfCarrots()) {
+			String input = validNextString("This will use " + carrotCost + " carrots. Do you wish to continue? (Y/N)");
+			
+			if(input.equals("y")||input.equals("Y")) {
+				playerToMove.setBoardPosition(newPosition);
+				playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() - carrotCost);
+				System.out.println("\n" + playerToMove.getPlayerName() + " moved to square #" + playerToMove.getBoardPosition() + "!\n");
+				System.out.println("\n============================");
+		    	System.out.println(playerToMove.toString() + "\n");
+				turnComplete = true;
+				pause();
+				}
+			else {
+				gameMenu();
+			}
+		}
+		else {
+			System.out.println("You do not have enough carrots for this move");
+			pause();
+			gameMenu();
+		}
+		
     }
     
     /**
