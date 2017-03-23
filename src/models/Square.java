@@ -2,10 +2,12 @@ package models;
 
 public class Square 
 {
+
 	private int squareNumber;
     private String squareType;
     private boolean isOccupied; 
  
+
     /**
      * Constructor for objects of class Square
      * 
@@ -30,6 +32,7 @@ public class Square
      
     //Setters
     
+
     public void setSquareType(String squareType) {
     	this.squareType = squareType;
     	}
@@ -43,7 +46,6 @@ public class Square
 	//}
     
     public String toString() {
-    	
     	return squareNumber + "\t" + squareType + "\n";
     }
 }

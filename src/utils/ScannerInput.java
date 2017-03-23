@@ -13,6 +13,7 @@ public class ScannerInput {
 				System.out.print(prompt);
 				return Integer.parseInt( input.next() );
 			}
+
 			catch (NumberFormatException | IndexOutOfBoundsException e) { 
 				System.err.println("\tEnter a valid number please.");
 			}
@@ -26,6 +27,5 @@ public class ScannerInput {
 		Scanner input = new Scanner(System.in);
 		System.out.print(prompt);
 		return input.nextLine();			
-	}
-	
+  }
 }

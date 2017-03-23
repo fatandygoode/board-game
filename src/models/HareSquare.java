@@ -9,6 +9,7 @@ public class HareSquare extends Square {
     private int hareCard;
  
     //Constructor
+
     public HareSquare (String squareType)
     {
         super(squareType);

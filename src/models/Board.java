@@ -114,6 +114,7 @@ public class Board
 	 * @param index - the index of the player to be returned
 	 * @return the object of type Player corresponding to the given index
 	 */
+
 	public Player getPlayer(int index) {
 		return players.get(index);
     }
