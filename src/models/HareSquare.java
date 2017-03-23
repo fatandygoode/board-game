@@ -9,9 +9,10 @@ public class HareSquare extends Square {
     private int hareCard;
  
     //Constructor
-    public HareSquare (String squareType, boolean isOccupied)
+
+    public HareSquare (String squareType)
     {
-        super(squareType, isOccupied);
+        super(squareType);
          
         String[] hareCardArray =  {"Free Ride", "Free Ride", "Draw 10 Carrots for each lettuce you still hold", 
                 "Draw 10 Carrots for each lettuce you still hold", "Give 10 carrots to each player lying behind you in the race(if any)", 

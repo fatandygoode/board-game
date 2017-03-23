@@ -2,15 +2,20 @@ package models;
 
 public class Square 
 {
-    //Instance Fields
+
 	private int squareNumber;
     private String squareType;
     private boolean isOccupied; 
  
-    //Constructor
-    public Square(int squareNumber, String squareType) {
+
+    /**
+     * Constructor for objects of class Square
+     * 
+     * @param squareNumber - The square number
+     */
+    public Square(int squareNumber){//, String squareType) {
     	this.squareNumber = squareNumber;
-    	this.squareType = squareType;
+    	//this.squareType = squareType;
     }
      
     //Getters
@@ -27,20 +32,21 @@ public class Square
      
     //Setters
     
-    //public void setSquareType(String squareType) {
-    //        this.squareType = squareType;
-    //}
+
+    public void setSquareType(String squareType) {
+    	this.squareType = squareType;
+    	}
     
     public void setIsOccupied(boolean isOccupied) {
         this.isOccupied = isOccupied;
     }
 
-	//public void setSquareNumber(int squareNumber) {
+	//public void setSquareNumber(int squareNumber) {//method not required
 	//	this.squareNumber = squareNumber;
 	//}
     
     public String toString() {
-    	return squareNumber + squareType + isOccupied;
+    	return squareNumber + "\t" + squareType + "\n";
     }
 }
 

@@ -18,8 +18,8 @@ public class MenuController {
     private int turnCounter; //keeps track of whose turn it is
     private boolean gameInProgress; //changes main menu options if the game has begun
     private boolean turnComplete; //to facilitate nextPlayer method
-    private boolean firstLaunch;
-    private Player playerToMove;
+    private boolean firstLaunch; //to display welcome message
+    private Player playerToMove; //global variable, used in multiple methods, consider merge later
     
     public static void main(String[] args) {
 		new MenuController();
@@ -29,10 +29,13 @@ public class MenuController {
      * Constructor for objects of class MenuController
      */
     public MenuController() {
+
     	board = new Board();
     	turnCounter = 0;
     	firstLaunch = true;
-    	playerToMove = board.get(turnCounter);
+    	//gameInProgress = false;
+    	//turnComplete = false;
+    	//playerToMove cannot be initialised in constructor, depends on unconstructed objects
     	runMenu();
     }
     
@@ -69,11 +72,16 @@ public class MenuController {
      * This is the method that controls the loop.
      */
     private void runMenu() {
-        int option = mainMenu();
-    	boolean skipMainMenu = false;
-        while (option != 0) {// 0 to exit  
-            switch (option) {
-            	case 1:	
+
+    	
+        int mainMenuOption = mainMenu();//puts user's choice from the main menu through the switch loop
+        
+    	boolean skipMainMenu = false;//keep displaying main menu until user starts the game
+        
+    	while (mainMenuOption != 0) {// 0 to exit  
+            switch (mainMenuOption) {
+    
+            	case 1:	//add player
                 	if(gameInProgress) {
                 		System.out.println("Error, cannot perform this function after the game has started");
                 	}
@@ -89,7 +97,8 @@ public class MenuController {
                 	}
                 	break;
 	                    
-                case 2:
+
+                case 2: //list players
                     if (board.numberOfPlayers() > 0) {
                     System.out.println(board.listPlayers());
                     System.out.println("\nTotal: " + board.numberOfPlayers() + "\n");
@@ -98,13 +107,14 @@ public class MenuController {
                     	System.out.println("No players added");
                     }
                     break;
-                    	
-                case 3:
+                    
+                case 3: //edit player name
                     if (board.numberOfPlayers() > 0) {
                         System.out.println(board.listPlayers());
 
                         int index = validNextInt("\nPlease enter the index for the player you wish to edit: ");
-            			Player playerToUpdate = board.get(index);
+
+            			Player playerToUpdate = board.getPlayer(index);
 
                         String newName = validNextString("\nEnter the new name for " + playerToUpdate.getPlayerName() + ": ");
                         playerToUpdate.setPlayerName(newName);
@@ -114,7 +124,8 @@ public class MenuController {
                     }
                     break;
                     
-                case 4:
+
+                case 4: //remove player
                 	if(gameInProgress) {
                 		System.out.println("Error, cannot perform this function after the game has started");
                 	}
@@ -123,7 +134,8 @@ public class MenuController {
 	                        System.out.println(board.listPlayers());
 	
 	                        int index = validNextInt("\nPlease enter the index of the player you wish to delete: ");
-	                        System.out.println("\n" + board.get(index).getPlayerName() + " removed from the game");
+
+	                        System.out.println("\n" + board.getPlayer(index).getPlayerName() + " removed from the game");
 	                        board.remove(index);
 	                    }
 	                    else {
@@ -132,11 +144,15 @@ public class MenuController {
                 	}
                     break;
                     
-                case 5:
+
+                case 5: //begin(resume) the game
                 	if(board.numberOfPlayers() > 1) {//need at least 2 players
-                		gameInProgress = true;
-                		skipMainMenu = true;
-                		runGame();
+                		
+                		gameInProgress = true;//change to main menu options
+                		
+                		skipMainMenu = true;//stop displaying main menu when running the game
+                		
+                		runGame();//starts the game
                 	}
                 	else {
                 		System.out.println("\nYou need to add between 2 and 6 players to begin the game");
@@ -144,15 +160,16 @@ public class MenuController {
                 	break;
                 	
                 default:   
-                    System.out.println("\nInvalid option entered: " + option);
+
+                    System.out.println("\nInvalid option entered: " + mainMenuOption);
                     break;
             }
             
             pause();
             
-			//display the main menu again if not starting game
-            if(skipMainMenu == false) {
-            	option = mainMenu();
+
+            if(skipMainMenu == false) { //display the main menu again if not starting game
+            	mainMenuOption = mainMenu();
 			}
 			
         }
@@ -166,7 +183,8 @@ public class MenuController {
      */
     private void runGame() {
 
-    	if(firstLaunch) {
+
+    	if(firstLaunch) {//welcome message only on first launch
     	System.out.println("<<=====>>\n");
     	System.out.println("Welcome\n");
     	System.out.println("<<=====>>\n");
@@ -175,7 +193,15 @@ public class MenuController {
     	}
     	
     	//display status
+
+    	this.playerToMove = board.getPlayer(turnCounter);	//can't initialise in constructor
+    												//calls on board class
         System.out.println("\n" + playerToMove.getPlayerName() + ", it's your turn\n");
+        //===========TO-DO==============================================
+        //
+        //run "carry-over" moves if applicable
+        //
+        //===========================================================
     	System.out.println(playerToMove.toString() + "\n");
     	
     	makeMove(); //starts next method to continue
@@ -185,11 +211,20 @@ public class MenuController {
      * Method to display the options available to the current player
      */
     private int gameMenu() {
+    	
     	 System.out.println("\nIn Game Menu");
          System.out.println("===============");     
-         System.out.println("  1) Move to a new square");   
-         System.out.println("  2) Display the full board");
-         System.out.println("  3) Show available moves");    
+         System.out.println("  1) Move forwards to a new square");
+         System.out.println("  2) Move backwards to the nearest tortoise square");   
+         System.out.println("  3) Draw or pay carrots");//only on carrot square (to do)
+         System.out.println("===============");
+         System.out.println("  4) Display the full board");
+         System.out.println("  5) Show available moves");//auto show if none are available (to do)
+         //==========TO-DO========================
+         //
+         // Add or amend options
+         //
+         //========================================
          System.out.println("===============");
          System.out.println("  0) Return to main menu");
     	
@@ -201,26 +236,44 @@ public class MenuController {
     /**
      * Method to execute the move as directed by the player
      */
-    private void makeMove() {	
-    	int gameMenuOption = gameMenu();	
+    private void makeMove() {
+    	
+    	int gameMenuOption = gameMenu();//puts user's choice through switch loop
 
     	switch (gameMenuOption) {
-    	case 1:
-    		moveSquare();
-    		break;
-    	case 2:
-    		System.out.println("\nNothing found\n");
-    		pause();
-    		break;
-    	case 3:
-    		System.out.println("\nNothing found\n");
-    		pause();
-    		break;
-    	case 0:
-    		runMenu();
-    		break;
-    	default:
-    		break;
+	    	
+    		case 1://move forward to a new square
+	    		moveSquare();
+	    		break;
+	    		
+	    	case 2://menu option 2
+	    		System.out.println("\nNothing found\n");//add a method for menu option 2
+	    		pause();
+	    		break;
+	    		
+	    	case 3://menu option 3
+	    		System.out.println("\nNothing found\n");//add a method for menu option 3
+	    		pause();
+	    		break;
+	    		
+	    	case 4:
+	    		System.out.println(board.listSquares());
+	    		pause();
+	    		break;
+	    	
+	    	//==========TO-DO=================
+	    	//
+	    	// Add or amend cases as required
+	    	//
+	    	//==================================
+	    		
+	    	case 0://return to main menu
+	    		runMenu();
+	    		break;
+	    		
+	    	default:
+                System.out.println("\nInvalid option entered: " + gameMenuOption);
+	    		break;
     	}
 		
     	nextPlayer();
@@ -238,16 +291,23 @@ public class MenuController {
     	if(turnComplete) {
     	turnCounter++; //increment turn counter by 1
     	turnCounter = turnCounter % board.players.size(); //reset to zero after all players have played
-        turnComplete = false;
+
+        turnComplete = false;//back to false for the next player
     	}
     	runGame();
     }
     
     private void moveSquare() {
-    	
-		int newPosition = validNextInt("\nWhere do you want to move to? Enter square number: \n");
+
+    	//============TO-DO====================
+    	//
+    	//Only allow forward moves
+    	//Can't go beyond finish
+    	//
+    	//===================================
+		int boardPosition = validNextInt("\nWhere do you want to move to? Enter square number: \n");
 		
-		int i = newPosition - playerToMove.getBoardPosition();
+		int i = boardPosition - playerToMove.getBoardPosition();
 		int carrotCost = 0;
 		while( i > 0 ) {
 			carrotCost = carrotCost + i;
@@ -257,12 +317,20 @@ public class MenuController {
 			String input = validNextString("This will use " + carrotCost + " carrots. Do you wish to continue? (Y/N)");
 			
 			if(input.equals("y")||input.equals("Y")) {
-				playerToMove.setBoardPosition(newPosition);
+
+				playerToMove.setBoardPosition(boardPosition);
 				playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() - carrotCost);
+				//========TO-DO=======================
+				//
+				//Write method to return Race Position
+				//
+				//====================================
 				System.out.println("\n" + playerToMove.getPlayerName() + " moved to square #" + playerToMove.getBoardPosition() + "!\n");
 				System.out.println("\n============================");
-		    	System.out.println(playerToMove.toString() + "\n");
-				turnComplete = true;
+		    	
+				System.out.println(playerToMove.toString() + "\n");
+				
+				turnComplete = true;//invokes nextPlayer method
 				pause();
 				}
 			else {
@@ -274,6 +342,12 @@ public class MenuController {
 			pause();
 			gameMenu();
 		}
+
+		//===============TO-DO==========================================
+		//
+		//Run the subsequent actions that happen after moving to a new square
+		//
+		//===========================================================
 		
     }
     
