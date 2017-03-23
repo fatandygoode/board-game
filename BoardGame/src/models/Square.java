@@ -14,7 +14,7 @@ public class Square
     }
     
 
-    public void makeSquare()
+    public void makeSquare()//This method doesn't do anything!!
 	{
 		for(int squareNumber = 0; squareNumber < 66; squareNumber++)
 		{
