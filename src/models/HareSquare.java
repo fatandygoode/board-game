@@ -1,3 +1,5 @@
+//class not used
+
 package models;
 
 import java.util.Arrays;
@@ -9,10 +11,9 @@ public class HareSquare extends Square {
     private int hareCard;
  
     //Constructor
-
-    public HareSquare (String squareType)
+    public HareSquare ()
     {
-        super(squareType);
+        super();
          
         String[] hareCardArray =  {"Free Ride", "Free Ride", "Draw 10 Carrots for each lettuce you still hold", 
                 "Draw 10 Carrots for each lettuce you still hold", "Give 10 carrots to each player lying behind you in the race(if any)", 

@@ -29,7 +29,7 @@ public class MenuController {
      * Constructor for objects of class MenuController
      */
     public MenuController() {
-
+    	
     	board = new Board();
     	turnCounter = 0;
     	firstLaunch = true;
@@ -54,25 +54,27 @@ public class MenuController {
         System.out.println("  3) Edit a player name");        
         System.out.println("  4) Remove a player");    
         System.out.println("---------");
-        if(gameInProgress) {
-    		System.out.println("  5) Resume the game");
-    	}
-    	else {
-    		System.out.println("  5) Begin the game");
-    	}
+        	if(gameInProgress) {
+    	System.out.println("  5) Resume the game");
+        	}
+        	else {
+    	System.out.println("  5) Begin the game");
+        	}
+        System.out.println("---------");
+        System.out.println("  6) Save game (XML)");
+        System.out.println("  7) Load game (XML)");
         System.out.println("---------");
         System.out.println("  0) Exit");
         
-        int option = validNextInt("==>> ");
+        int mainMenuOption = validNextInt("==>> ");
         
-        return option;
+        return mainMenuOption;
     }
     
     /**
      * This is the method that controls the loop.
      */
     private void runMenu() {
-
     	
         int mainMenuOption = mainMenu();//puts user's choice from the main menu through the switch loop
         
@@ -80,7 +82,6 @@ public class MenuController {
         
     	while (mainMenuOption != 0) {// 0 to exit  
             switch (mainMenuOption) {
-    
             	case 1:	//add player
                 	if(gameInProgress) {
                 		System.out.println("Error, cannot perform this function after the game has started");
@@ -97,7 +98,6 @@ public class MenuController {
                 	}
                 	break;
 	                    
-
                 case 2: //list players
                     if (board.numberOfPlayers() > 0) {
                     System.out.println(board.listPlayers());
@@ -107,13 +107,12 @@ public class MenuController {
                     	System.out.println("No players added");
                     }
                     break;
-                    
+                    	
                 case 3: //edit player name
                     if (board.numberOfPlayers() > 0) {
                         System.out.println(board.listPlayers());
 
                         int index = validNextInt("\nPlease enter the index for the player you wish to edit: ");
-
             			Player playerToUpdate = board.getPlayer(index);
 
                         String newName = validNextString("\nEnter the new name for " + playerToUpdate.getPlayerName() + ": ");
@@ -124,7 +123,6 @@ public class MenuController {
                     }
                     break;
                     
-
                 case 4: //remove player
                 	if(gameInProgress) {
                 		System.out.println("Error, cannot perform this function after the game has started");
@@ -134,7 +132,6 @@ public class MenuController {
 	                        System.out.println(board.listPlayers());
 	
 	                        int index = validNextInt("\nPlease enter the index of the player you wish to delete: ");
-
 	                        System.out.println("\n" + board.getPlayer(index).getPlayerName() + " removed from the game");
 	                        board.remove(index);
 	                    }
@@ -144,7 +141,6 @@ public class MenuController {
                 	}
                     break;
                     
-
                 case 5: //begin(resume) the game
                 	if(board.numberOfPlayers() > 1) {//need at least 2 players
                 		
@@ -160,14 +156,12 @@ public class MenuController {
                 	break;
                 	
                 default:   
-
                     System.out.println("\nInvalid option entered: " + mainMenuOption);
                     break;
             }
             
             pause();
             
-
             if(skipMainMenu == false) { //display the main menu again if not starting game
             	mainMenuOption = mainMenu();
 			}
@@ -183,7 +177,6 @@ public class MenuController {
      */
     private void runGame() {
 
-
     	if(firstLaunch) {//welcome message only on first launch
     	System.out.println("<<=====>>\n");
     	System.out.println("Welcome\n");
@@ -193,7 +186,6 @@ public class MenuController {
     	}
     	
     	//display status
-
     	this.playerToMove = board.getPlayer(turnCounter);	//can't initialise in constructor
     												//calls on board class
         System.out.println("\n" + playerToMove.getPlayerName() + ", it's your turn\n");
@@ -215,14 +207,14 @@ public class MenuController {
     	 System.out.println("\nIn Game Menu");
          System.out.println("===============");     
          System.out.println("  1) Move forwards to a new square");
-         System.out.println("  2) Move backwards to the nearest tortoise square");   
+         System.out.println("  2) Move backwards to the nearest tortoise square");//(to do
          System.out.println("  3) Draw or pay carrots");//only on carrot square (to do)
          System.out.println("===============");
          System.out.println("  4) Display the full board");
          System.out.println("  5) Show available moves");//auto show if none are available (to do)
          //==========TO-DO========================
          //
-         // Add or amend options
+         // Add or amend options and create methods
          //
          //========================================
          System.out.println("===============");
@@ -236,7 +228,7 @@ public class MenuController {
     /**
      * Method to execute the move as directed by the player
      */
-    private void makeMove() {
+    private void makeMove() {	
     	
     	int gameMenuOption = gameMenu();//puts user's choice through switch loop
 
@@ -263,7 +255,7 @@ public class MenuController {
 	    	
 	    	//==========TO-DO=================
 	    	//
-	    	// Add or amend cases as required
+	    	// Add or amend cases as required adn write methods
 	    	//
 	    	//==================================
 	    		
@@ -291,14 +283,12 @@ public class MenuController {
     	if(turnComplete) {
     	turnCounter++; //increment turn counter by 1
     	turnCounter = turnCounter % board.players.size(); //reset to zero after all players have played
-
         turnComplete = false;//back to false for the next player
     	}
     	runGame();
     }
     
     private void moveSquare() {
-
     	//============TO-DO====================
     	//
     	//Only allow forward moves
@@ -317,7 +307,6 @@ public class MenuController {
 			String input = validNextString("This will use " + carrotCost + " carrots. Do you wish to continue? (Y/N)");
 			
 			if(input.equals("y")||input.equals("Y")) {
-
 				playerToMove.setBoardPosition(boardPosition);
 				playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() - carrotCost);
 				//========TO-DO=======================
@@ -342,7 +331,6 @@ public class MenuController {
 			pause();
 			gameMenu();
 		}
-
 		//===============TO-DO==========================================
 		//
 		//Run the subsequent actions that happen after moving to a new square

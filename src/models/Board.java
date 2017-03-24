@@ -14,7 +14,7 @@ public class Board
      */
     public Board() {
         players = new ArrayList<Player>();
-        squares = new ArrayList<Square>();
+        squares = new ArrayList<Square>(64);
         createBoard();
     }
     
@@ -22,8 +22,8 @@ public class Board
     	
     	int i = 0;
     	while(i < 65) {
-            squares.add(new Square(i));
-            i++;
+    		squares.add(new Square());
+    		i++;
     	}
         
     	squares.get(0).setSquareType("Start");
@@ -40,21 +40,28 @@ public class Board
         int[] lettuce = {10,22,42,57};
         for(int l : lettuce){
         	squares.get(l).setSquareType("Lettuce");
-        }
-        int[] number = {4,7,8,9,12,16,17,18,20,23,27,28,29,32,35,36,41,44,45,47,48,52,53,54,60};
-        for(int n : number){
-        	squares.get(n).setSquareType("Number");
-        }
+        }	
         int[] tortoise = {15,19,24,30,37,43,50,56};
         for(int t : tortoise){
         	squares.get(t).setSquareType("Tortoise");
         }
-                
-        //===========TO-DO======================
-        //
-        //Number square types
-        //
-        //=====================================
+        
+        int[] number156 = {7,16,32,48,60};
+        for(int n156 : number156){
+        	squares.get(n156).setSquareType("Number (1,5,6)");
+        }
+        int[] number2 = {8,17,23,29,35,41,47,53};
+        for(int n2 : number2){
+        	squares.get(n2).setSquareType("Number (2)");
+        }
+        int[] number3 = {4,12,20,28,36,44,52};
+        for(int n3 : number3){
+        	squares.get(n3).setSquareType("Number (3)");
+        }
+        int[] number4 = {9,18,27,45,54};
+        for(int n4 : number4){
+        	squares.get(n4).setSquareType("Number (4)");
+        }
     }
     
 	/**
@@ -94,7 +101,8 @@ public class Board
     public String listSquares() {
         String list = "";
         for (int index = 0; index < squares.size(); index++) {
-        	list = "\n" + list + squares.get(index).toString();
+        	//NumberSquare squareToDisplay = getSquare(index);
+        	list = "\n" + list + index + squares.get(index).toString() + "\n";
         }
             return list;        
     }
@@ -114,7 +122,6 @@ public class Board
 	 * @param index - the index of the player to be returned
 	 * @return the object of type Player corresponding to the given index
 	 */
-
 	public Player getPlayer(int index) {
 		return players.get(index);
     }
@@ -123,4 +130,6 @@ public class Board
 		return squares.get(index);
     }
 }
+
+
 
