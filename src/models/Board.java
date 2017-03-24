@@ -8,6 +8,7 @@ public class Board
 	
     public ArrayList<Player> players;
     public ArrayList<Square> squares;
+    public int numberOfPlayersFinished;
 
     /**
      * Constructor for objects of class Board
@@ -45,7 +46,13 @@ public class Board
         for(int t : tortoise){
         	squares.get(t).setSquareType("Tortoise");
         }
-        
+        //====================================================
+        //
+        // Consider extending to a number class with additional
+        //	numberSquareType variable
+        // *********Low priority task***************************
+        //
+        //====================================================
         int[] number156 = {7,16,32,48,60};
         for(int n156 : number156){
         	squares.get(n156).setSquareType("Number (1,5,6)");

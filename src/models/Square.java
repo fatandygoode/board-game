@@ -20,7 +20,7 @@ public class Square
         return squareType;
     }
      
-    public boolean getIsOccupied() {
+    public boolean isOccupied() {
         return isOccupied;
     }
     
@@ -30,7 +30,7 @@ public class Square
     	this.squareType = squareType;
     	}
     
-    public void setIsOccupied(boolean isOccupied) {
+    public void setOccupied(boolean isOccupied) {
         this.isOccupied = isOccupied;
     }
 
@@ -39,6 +39,7 @@ public class Square
     	if (isOccupied) {
     		occupied = "occupied";
     	}
+    	
     	return "\t" + squareType + "\t" + occupied;
     }
 }

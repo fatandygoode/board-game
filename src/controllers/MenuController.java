@@ -185,9 +185,12 @@ public class MenuController {
     	pause();
     	}
     	
-    	//display status
-    	this.playerToMove = board.getPlayer(turnCounter);	//can't initialise in constructor
-    												//calls on board class
+    	this.playerToMove = board.getPlayer(turnCounter);
+    	if(playerToMove.isFinished()) {
+    		skipTurn();
+    	}
+    	else{ //display status
+    															
         System.out.println("\n" + playerToMove.getPlayerName() + ", it's your turn\n");
         //===========TO-DO==============================================
         //
@@ -197,6 +200,7 @@ public class MenuController {
     	System.out.println(playerToMove.toString() + "\n");
     	
     	makeMove(); //starts next method to continue
+    	}
     }
     
     /**
@@ -255,7 +259,7 @@ public class MenuController {
 	    	
 	    	//==========TO-DO=================
 	    	//
-	    	// Add or amend cases as required adn write methods
+	    	// Add or amend cases as required and write methods
 	    	//
 	    	//==================================
 	    		
@@ -288,6 +292,11 @@ public class MenuController {
     	runGame();
     }
     
+    private void skipTurn() {
+    	turnComplete = true;
+    	nextPlayer();
+    }
+    
     private void moveSquare() {
     	//============TO-DO====================
     	//
@@ -316,8 +325,15 @@ public class MenuController {
 				//====================================
 				System.out.println("\n" + playerToMove.getPlayerName() + " moved to square #" + playerToMove.getBoardPosition() + "!\n");
 				System.out.println("\n============================");
-		    	
+				
+				if(boardPosition == 64) {
+					System.out.println("\n" + playerToMove.getPlayerName() + "finished the game!\n");
+					playerToMove.setFinished(true);
+					board.numberOfPlayersFinished++;
+				}
+				else {
 				System.out.println(playerToMove.toString() + "\n");
+				}
 				
 				turnComplete = true;//invokes nextPlayer method
 				pause();
@@ -334,6 +350,8 @@ public class MenuController {
 		//===============TO-DO==========================================
 		//
 		//Run the subsequent actions that happen after moving to a new square
+		//
+		//
 		//
 		//===========================================================
 		

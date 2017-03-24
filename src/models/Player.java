@@ -6,22 +6,23 @@ public class Player {
 	private int numberOfLettuces;
 	private int boardPosition;
 	private int racePosition;
-	
+	private boolean isFinished;
+
 	/**
-     * Constructor for objects of class Player
-     * 
-     * @param playerName Name of the player
-     * 
-     */
+	 * Constructor for objects of class Player
+	 * 
+	 * @param playerName Name of the player
+	 * 
+	 */
 	public Player(String playerName) {
-		
-        this.setPlayerName(playerName);
+
+		this.setPlayerName(playerName);
 		setNumberOfCarrots(65);
 		setNumberOfLettuces(3);
 		setRacePosition(0);	
 		setBoardPosition(0);
-    }
-	
+	}
+
 	/**
 	 * Method to get a player's name
 	 * @return the player's name
@@ -83,7 +84,7 @@ public class Player {
 	 * @param boardPosition - the player's new board position
 	 */
 	public void setBoardPosition(int boardPosition) {
-		this.boardPosition = boardPosition;
+			this.boardPosition = boardPosition;
 	}
 
 	/**
@@ -101,7 +102,21 @@ public class Player {
 	public void setRacePosition(int racePosition) {
 		this.racePosition = racePosition;
 	}
-	
+
+	/**
+	 * @return the isFinished
+	 */
+	public boolean isFinished() {
+		return isFinished;
+	}
+
+	/**
+	 * @param isFinished the isFinished to set
+	 */
+	public void setFinished(boolean isFinished) {
+		this.isFinished = isFinished;
+	}
+
 	/**
 	 * Method to return a string listing the player's attributes
 	 * @return a string listing the player's attributes
