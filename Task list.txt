@@ -1,22 +1,24 @@
 Line 210, 242
-Write a method for game menu option 2 i.e. move backwards to a tortoise square *
+Write a method for game menu option 2 i.e. move backwards to a tortoise square * bos
 
 Line 211, 247
-Write a method for game menu option 3 i.e. draw/pay carrots (only if on carrot square) *
+Write a method for game menu option 3 i.e. draw/pay carrots (only if on carrot square) * sm
 
 Line 292
-Only allow forward moves for option 1 *
-do not allow to go beyond finish *
-check number of lettuces is 0 to finish *
-check number of carrots is < 10,20,30 etc. to finish ***
+Only allow forward moves for option 1 * sm
+do not allow to go beyond finish * sm
+check number of lettuces is 0 to finish * sm
+
+check number of carrots is < 10,20,30 etc. to finish *** jm
 
 Line 314
-Write a method to return a player's place in the race **
+Write a method to return a player's place in the race ** pk
 
 Line 335
-Write a method to return the square type a player has moved to on a forward move *
-Invoke the relevant actions to take *
-------------->>>> Write methods for these actions i.e. what happens after moving to hare/lettuce/number/carrot square ***
+Write a method to return the square type a player has moved to on a forward move * bos
+Invoke the relevant actions to take * bos
+
+------------->>>> Write methods for these actions i.e. what happens after moving to hare/lettuce/number/carrot square *** (4 separate methods) pk
 
 Line 278
-Change the next player method to remove a finished player from the cycle **
+Change the next player method to remove a finished player from the cycle ** jm
