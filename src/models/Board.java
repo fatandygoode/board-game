@@ -17,6 +17,14 @@ public class Board
         players = new ArrayList<Player>();
         squares = new ArrayList<Square>(64);
         createBoard();
+        addPlayers();//delete when finished
+    }
+    
+    private void addPlayers(){ //to help run the console quicker. delete when finished
+    	players.add(new Player("John"));
+    	players.add(new Player("Brian"));
+    	players.add(new Player("Patrick"));
+    	players.add(new Player("Sean"));
     }
     
     private void createBoard() {
