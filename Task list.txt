@@ -7,9 +7,10 @@ Write a method for game menu option 3 i.e. draw/pay carrots (only if on carrot s
 Line 292
 Only allow forward moves for option 1 * sm
 do not allow to go beyond finish * sm
-check number of lettuces is 0 to finish * sm
 
 check number of carrots is < 10,20,30 etc. to finish *** jm
+check number of lettuces is 0 to finish * jm
+
 
 Line 314
 Write a method to return a player's place in the race ** pk
