@@ -43,21 +43,25 @@ public class MenuController {
 	private int mainMenu(){
 
 		System.out.println("\nBoard Game Menu");
+		System.out.println(" --------");
+        System.out.println("  1) View Game Rules");
+
+        System.out.println("---------");
 		System.out.println("---------");     
-		System.out.println("  1) Add a player");    
-		System.out.println("  2) List all players");
-		System.out.println("  3) Edit a player name");        
-		System.out.println("  4) Remove a player");    
+		System.out.println("  2) Add a player");    
+		System.out.println("  3) List all players");
+		System.out.println("  4) Edit a player name");        
+		System.out.println("  5) Remove a player");    
 		System.out.println("---------");
 		if(gameInProgress){
-			System.out.println("  5) Resume the game");
+			System.out.println("  6) Resume the game");
 		}
 		else{
-			System.out.println("  5) Begin the game");
+			System.out.println("  6) Begin the game");
 		}
 		System.out.println("---------");
-		System.out.println("  6) Save game (XML)");
-		System.out.println("  7) Load game (XML)");
+		System.out.println("  7) Save game (XML)");
+		System.out.println("  8) Load game (XML)");
 		System.out.println("---------");
 		System.out.println("  0) Exit");
 
@@ -74,7 +78,68 @@ public class MenuController {
 
 		while (mainMenuOption != 0){// 0 to exit  
 			switch (mainMenuOption){
-			case 1:	//add player
+			
+			case 1: 
+            	
+                System.out.println("------------------");
+                System.out.println(" A game of skill based on a classic theme");
+            	System.out.println("------------------");
+            	System.out.println(" Number of players : 2 to 6 " + "\n");
+            	System.out.println(" Playing time  : 45-60 minutes");
+            	System.out.println(" Types of card  : 6 race cards, 15 hare cares, 18 lettuce cards, and carrot cards in denominations of 1, 5, 10, 15, 30, 60. ");
+            	
+            	System.out.println("------------------");
+            	System.out.println(" Introduction");
+            	System.out.println("------------------");
+            	System.out.println(" Hare & Tortoise is a race game with a difference." + "\n");
+            	System.out.println(" You don't move round the track by rolling dice and obeying instructions," );
+            	System.out.println(" but by spending carrots and spending them wisely . In this game you can always move as far as you like");
+            	System.out.println(" - so long as you have enough carrots to pay for it." + "\n");
+            	System.out.println(" (You start with 65 and earn more by landing on certain square.) " + "\n");
+            	System.out.println("------------------");
+            	System.out.println(" The catch is the furhter you move the more you pay!");
+            	System.out.println("------------------");
+            	System.out.println(" So players who hare ahead too fast, run out of carrots first and the lose valuable timem to get them back " + "\n");
+            	System.out.println(" Meanwhile, those who plod along like tortoises have so many carrots left that they have a good chance");
+            	System.out.println(" of overtaking the hares.");
+            	System.out.println("------------------");
+            	System.out.println(" The skill of the game lies in choosing the right square to land on ");
+            	System.out.println(" and in playing hare or tortoise depending on your position " + "\n");
+            	System.out.println(" The fun of it lies in changing other runner's positions by overtaking them.");
+            	System.out.println("  - or even moving backwards!" + "\n");
+            	System.out.println(" Sometimes it's right to leap ahead. Sometime it's best to lag behind" + "\n");
+            	System.out.println(" But all the time it's down to YOU to make the right decison " + "\n");
+            	System.out.println("------------------");
+            	System.out.println(" Off you go. May the best animal win! ");
+            	System.out.println("------------------");
+            	System.out.println(" Getting Ready");
+            	System.out.println("------------------");
+            	System.out.println(" Choose a runner each and place it on the board at START.");
+            	System.out.println(" Deal carrot cards to each player as follows : one 30, one 15, one 10, two 5's - total 65 carrots" + "\n");
+            	System.out.println(" During play , hold you carrot cards so that no-one knows excatly how many you have left.");
+            	System.out.println(" Each player also takes three lettuce cards and a race card. The race card contains useful information");
+            	System.out.println(" and is for reference only.");
+            	System.out.println(" Seperate the undealt carrot cards and place them on the board in the numbered spaces - the 'carrot patch'.");
+            	System.out.println(" Throughout play, all carrot payments are made into this patch.");
+            	System.out.println("------------------");
+            	System.out.println(" Object of the game");
+            	System.out.println("------------------");
+            	System.out.println(" To get your runner home first. But you must;");
+            	System.out.println(" Get rid of all your lettuces on the way round ( This is done by landing on lettuce squares");
+            	System.out.println(" Not have too many carrot left over when you reach home.");
+            	System.out.println(" The first home is allowed up to 10 unused carrots, second 20, the thrid 30, and so on) ");
+            	System.out.println("------------------");
+            	System.out.println(" How to move");
+            	System.out.println("------------------");
+            	System.out.println(" You may move your runner forwards to any unoccupied square exceopt the tortoise square." + "\n");
+            	System.out.println(" It can be any distance as long as you have enough carrots to pay for the move");
+            	System.out.println(" The cost is shown on the race.");
+            	System.out.println(" Later in the game you may move backwards instead of forwards, only to a tortoise square." + "\n");
+            	System.out.println(" Moving backwards costs nothing - instead, it is a way of earning carrots.");
+
+
+            		break;
+			case 2:	//add player
 				if(gameInProgress){
 					System.out.println("Error, cannot perform this function after the game has started");
 				}
@@ -89,7 +154,7 @@ public class MenuController {
 					}
 				}
 				break;
-			case 2: //list players
+			case 3: //list players
 				if (board.numberOfPlayers() > 0){
 					System.out.println(board.listPlayers());
 					System.out.println("\nTotal: " + board.numberOfPlayers() + "\n");
@@ -99,7 +164,7 @@ public class MenuController {
 				}
 				break;
 
-			case 3: //edit player name
+			case 4: //edit player name
 				if(board.numberOfPlayers() > 0){
 					System.out.println(board.listPlayers());
 
@@ -113,7 +178,7 @@ public class MenuController {
 					System.out.println("No players added");
 				}
 				break;
-			case 4: //remove player
+			case 5: //remove player
 				if(gameInProgress){
 					System.out.println("Error, cannot perform this function after the game has started");
 				}
@@ -130,7 +195,7 @@ public class MenuController {
 					}
 				}
 				break;
-			case 5: //begin(resume) the game
+			case 6: //begin(resume) the game
 				if(board.numberOfPlayers() > 1){//need at least 2 players
 
 					gameInProgress = true;//change to main menu options
@@ -219,15 +284,35 @@ public class MenuController {
 
 		switch (gameMenuOption){
 		case 1://move forward to a new square
-			moveSquare();
-			break;
-		case 2://menu option 2
-			System.out.println("\nNothing found\n");//add a method for menu option 2
-			pause();
-			break;
-		case 3://menu option 3
-			System.out.println("\nNothing found\n");//add a method for menu option 3
-			pause();
+            if (player.newBoardPostion > player.boardPosition){
+                moveSquare();
+              }
+              else {
+                  System.out.println ("Invalid Move" + "\n");
+                  System.out.println ("You have selected to move forward");
+              }
+              if (player.boardPostion > 64){
+                  System.out.println ("Congratulations! You have passed the finishing line");
+                }
+                else{
+                    moveSquare();
+                }
+            break;
+        case 2://menu option 2
+            System.out.println("\nNothing found\n");//add a method for menu option 2
+            pause();
+            break;
+        case 3://menu option
+        if (player.boardPostion () == carrot ){
+            numberOfCarrots + 10 = numberOfCarrots;
+         
+          }
+          else if (player.boardPostion () == carrot ){
+              numberOfCarrots - 10 = numberOfCarrots;
+        }
+          else{
+              System.out.println (" You must be on a carrot square to draw or pay carrots");
+            }
 			break;
 		case 4:
 			System.out.println(board.listSquares());
