@@ -1,5 +1,6 @@
 package utils;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ScannerInput {
@@ -13,11 +14,15 @@ public class ScannerInput {
 				System.out.print(prompt);
 				return Integer.parseInt( input.next() );
 			}
-			catch (NumberFormatException | ArrayIndexOutOfBoundsException e) { 
+			catch (NumberFormatException | IndexOutOfBoundsException e) {
 				System.err.println("\tEnter a valid number please.");
 			}
 		}
 		while (true);
+	}
+
+	public static boolean validNextIndex(ArrayList<Object> arrayList, int index) {
+		return index < arrayList.size();
 	}
 	
 	@SuppressWarnings("resource")

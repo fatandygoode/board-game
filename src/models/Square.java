@@ -8,7 +8,6 @@ public class Square
     /**
      * Constructor for objects of class Square
      * 
-     * @param squareNumber - The square number
      */
     public Square(){
     	
@@ -39,7 +38,6 @@ public class Square
     	if (isOccupied) {
     		occupied = "occupied";
     	}
-    	
     	return "\t" + squareType + "\t" + occupied;
     }
 }
