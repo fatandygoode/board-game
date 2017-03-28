@@ -2,11 +2,9 @@ package models;
 
 public class Player {
 	private String playerName;
-	private int numberOfCarrots;
-	private int numberOfLettuces;
-	private int boardPosition;
-	private int racePosition;
+	private int numberOfCarrots, numberOfLettuces, playerBoardPosition, squareCounter, racePosition;
 	private boolean isFinished;
+
 
 	/**
 	 * Constructor for objects of class Player
@@ -18,9 +16,8 @@ public class Player {
 
 		this.setPlayerName(playerName);
 		setNumberOfCarrots(65);
-		setNumberOfLettuces(3);
-		setRacePosition(0);	
-		setBoardPosition(0);
+		this.numberOfLettuces = 3;
+		setRacePosition(5);
 	}
 
 	/**
@@ -65,43 +62,27 @@ public class Player {
 
 	/**
 	 * Method to update the number of lettuces a player has
-	 * @param numberOfLettuces - the new number of lettuces for the player
 	 */
-	public void setNumberOfLettuces(int numberOfLettuces) {
-		this.numberOfLettuces = numberOfLettuces;
+	public void chewALettuce() {
+		this.numberOfLettuces--;
 	}
 
 	/**
 	 * Method to get a player's current board position
 	 * @return the player's current board position
 	 */
-	public int getBoardPosition() {
-		return boardPosition;
+	public int getPlayerBoardPosition() {
+		return playerBoardPosition;
 	}
 
 	/**
 	 * Method to move a player to a new board position
-	 * @param boardPosition - the player's new board position
+	 * @param playerBoardPosition - the player's new board position
 	 */
-	public void setBoardPosition(int boardPosition) {
-			this.boardPosition = boardPosition;
+	public void setPlayerBoardPosition(int playerBoardPosition) {
+			this.playerBoardPosition = playerBoardPosition;
 	}
 
-	/**
-	 * Method to get a player's race position
-	 * @return the player's current place in the race
-	 */
-	public int getRacePosition() {
-		return racePosition;
-	}
-
-	/**
-	 * Method to update a player's race postion
-	 * @param racePosition - the player's new place in the race
-	 */
-	public void setRacePosition(int racePosition) {
-		this.racePosition = racePosition;
-	}
 
 	/**
 	 * @return the isFinished
@@ -111,10 +92,10 @@ public class Player {
 	}
 
 	/**
-	 * @param isFinished the isFinished to set
+	 *
 	 */
-	public void setFinished(boolean isFinished) {
-		this.isFinished = isFinished;
+	public void setFinished() {
+		this.isFinished = true;
 	}
 
 	/**
@@ -125,7 +106,28 @@ public class Player {
 		return 	"Player: " + playerName +
 				"\nCarrots: " + numberOfCarrots +
 				"\tLettuces: " + numberOfLettuces +
-				"\nBoard Position: " + boardPosition +
-				"\tRace Position: " + racePosition + "";
+				"\nBoard Position: " + playerBoardPosition +
+				"\tRace Position: " + racePosition;
+	}
+
+	public int getRacePosition() {
+		return racePosition;
+	}
+	public void setRacePosition(int racePosition) {
+		this.racePosition = racePosition;
+	}
+
+	/**
+	 * @return the squareCounter
+	 */
+	public int getSquareCounter() {
+		return squareCounter;
+	}
+
+	/**
+	 * @param squareCounter the squareCounter to set
+	 */
+	public void setSquareCounter(int squareCounter) {
+		this.squareCounter = squareCounter;
 	}
 }

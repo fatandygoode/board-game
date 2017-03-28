@@ -1,34 +1,44 @@
 package models;
 
 import java.util.ArrayList;
-import models.Player;
+import java.util.Collections;
+//import models.Player;
 
 public class Board
 {
-	
+    private ArrayList<Square> squares;
     public ArrayList<Player> players;
-    public ArrayList<Square> squares;
+    private ArrayList<HareCard> hareCards;
     public int numberOfPlayersFinished;
-
     /**
      * Constructor for objects of class Board
      */
     public Board() {
-        players = new ArrayList<Player>();
-        squares = new ArrayList<Square>(64);
+        squares = new ArrayList<>();
         createBoard();
+        players = new ArrayList<>();
         addPlayers();//delete when finished
+        hareCards = new ArrayList<>();
+        createDeck();
     }
-    
-    private void addPlayers(){ //to help run the console quicker. delete when finished
-    	players.add(new Player("John"));
-    	players.add(new Player("Brian"));
-    	players.add(new Player("Patrick"));
-    	players.add(new Player("Sean"));
+
+    private void createDeck() {
+        int i = 0;
+        while(i < 2){
+        hareCards.add(new HareCard("Give10"));
+        hareCards.add(new HareCard("MissTurn"));
+        hareCards.add(new HareCard("Restore65"));
+        hareCards.add(new HareCard("Draw10"));
+        hareCards.add(new HareCard("FreeRide"));
+        hareCards.add(new HareCard("LoseHalf"));
+        hareCards.add(new HareCard("Show"));
+        i++;
+        }
+        hareCards.add(new HareCard("Shuffle"));
+        Collections.shuffle(hareCards);
     }
-    
+
     private void createBoard() {
-    	
     	int i = 0;
     	while(i < 65) {
     		squares.add(new Square());
@@ -78,23 +88,43 @@ public class Board
         	squares.get(n4).setSquareType("Number (4)");
         }
     }
-    
-	/**
-     * Method to add an object of type Player to the arraylist players	
+
+	public Square getSquare(int index) {
+		return squares.get(index);
+    }
+
+    public String listSquares() {
+        String list = "";
+        for (int index = 0; index < squares.size(); index++) {
+            //NumberSquare squareToDisplay = getSquare(index);
+            list = "\n" + list + index + squares.get(index).toString() + "\n";
+        }
+        return list;
+    }
+
+    private void addPlayers(){ //to help run the console quicker. delete when finished
+        players.add(new Player("John"));
+        players.add(new Player("Brian"));
+        players.add(new Player("Patrick"));
+        players.add(new Player("Sean"));
+    }
+
+    /**
+     * Method to add an object of type Player to the arraylist players
      * @param player - the name of the player to be added
      */
-    public void add(Player player) {
-        players.add(player);  
+    public void addPlayer(Player player) {
+        players.add(player);
     }
-    
+
     /**
      * Method to get the number of players playing the game
      * @return the size of the array list players
      */
     public int numberOfPlayers() {
-    	return players.size();
+        return players.size();
     }
-    
+
     /**
      * Method to return an indexed list of the players added to the game
      * @return an indexed list of the players added to the game
@@ -102,47 +132,49 @@ public class Board
     public String listPlayers() {
         String list = "";
         for (int index = 0; index < players.size(); index++) {
-        	list = "\n" + list + index + " - " + players.get(index).getPlayerName() + "\n";
+            list = "\n" + list + index + " - " + players.get(index).getPlayerName() + "\n";
         }
         if (list.equals("")) {
             return "No players";
         }
         else {
             return list;
-        }        
-    }
-    
-    
-    public String listSquares() {
-        String list = "";
-        for (int index = 0; index < squares.size(); index++) {
-        	//NumberSquare squareToDisplay = getSquare(index);
-        	list = "\n" + list + index + squares.get(index).toString() + "\n";
         }
-            return list;        
     }
 
     /**
      * Method to remove a player from the game
      * @param index - the index of the player to be removed
      */
-	public void remove(int index) {
-		if ( (index >= 0) && (index < players.size() ) ) {
+    public void removePlayer(int index) {
+        if ( (index >= 0) && (index < players.size() ) ) {
             players.remove(index);
-        }	
-	}
-	
-	/**
-	 * Method to get a player from the array list
-	 * @param index - the index of the player to be returned
-	 * @return the object of type Player corresponding to the given index
-	 */
-	public Player getPlayer(int index) {
-		return players.get(index);
+        }
     }
-	
-	public Square getSquare(int index) {
-		return squares.get(index);
+
+    /**
+     * Method to get a player from the array list
+     * @param index - the index of the player to be returned
+     * @return the object of type Player corresponding to the given index
+     */
+    public Player getPlayer(int index) {
+        return players.get(index);
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public ArrayList<Square> getSquares() {
+        return squares;
+    }
+
+    public ArrayList<HareCard> getHareCards() {
+        return hareCards;
+    }
+
+    public HareCard getHareCard(int i) {
+        return hareCards.get(i);
     }
 }
 
