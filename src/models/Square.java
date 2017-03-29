@@ -12,23 +12,19 @@ public class Square
     public Square(){
     	
     }
-     
-    //Getters
     
     public String getSquareType() {
         return squareType;
     }
-     
+
+    public void setSquareType(String squareType) {
+        this.squareType = squareType;
+    }
+
     public boolean isOccupied() {
         return isOccupied;
     }
-    
-    //Setters
-    
-    public void setSquareType(String squareType) {
-    	this.squareType = squareType;
-    	}
-    
+
     public void setOccupied(boolean isOccupied) {
         this.isOccupied = isOccupied;
     }

@@ -5,7 +5,6 @@ public class Player {
 	private int numberOfCarrots, numberOfLettuces, playerBoardPosition, squareCounter;
 	private boolean isFinished;
 
-
 	/**
 	 * Constructor for objects of class Player
 	 * 
@@ -13,9 +12,8 @@ public class Player {
 	 * 
 	 */
 	public Player(String playerName) {
-
 		this.setPlayerName(playerName);
-		setNumberOfCarrots(65);
+		setNumberOfCarrots(65000);
 		this.numberOfLettuces = 3;
 	}
 
@@ -82,7 +80,6 @@ public class Player {
 			this.playerBoardPosition = playerBoardPosition;
 	}
 
-
 	/**
 	 * @return the isFinished
 	 */
@@ -90,9 +87,6 @@ public class Player {
 		return isFinished;
 	}
 
-	/**
-	 *
-	 */
 	public void setFinished() {
 		this.isFinished = true;
 	}
@@ -105,8 +99,8 @@ public class Player {
 		return 	"Player: " + playerName +
 				"\nCarrots: " + numberOfCarrots +
 				"\tLettuces: " + numberOfLettuces +
-				"\nBoard Position: " + playerBoardPosition;}
-
+				"\nBoard Position: " + playerBoardPosition;
+	}
 
 	/**
 	 * @return the squareCounter

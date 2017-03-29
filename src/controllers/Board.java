@@ -6,14 +6,12 @@ import models.Square;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import models.Player;
 
 public class Board
 {
     private ArrayList<Square> squares;
-    public ArrayList<Player> players;
+    private ArrayList<Player> players;
     private ArrayList<HareCard> hareCards;
-    public int numberOfPlayersFinished;
     /**
      * Constructor for objects of class Board
      */
@@ -29,17 +27,25 @@ public class Board
     private void createDeck() {
         int i = 0;
         while(i < 2){
-        hareCards.add(new HareCard("Give10"));
-        hareCards.add(new HareCard("MissTurn"));
-        hareCards.add(new HareCard("Restore65"));
-        hareCards.add(new HareCard("Draw10"));
-        hareCards.add(new HareCard("FreeRide"));
-        hareCards.add(new HareCard("LoseHalf"));
-        hareCards.add(new HareCard("Show"));
-        i++;
+            hareCards.add(new HareCard("Give10"));
+            hareCards.add(new HareCard("MissTurn"));
+            hareCards.add(new HareCard("Restore65"));
+            hareCards.add(new HareCard("Draw10"));
+            hareCards.add(new HareCard("FreeRide"));
+            hareCards.add(new HareCard("LoseHalf"));
+            hareCards.add(new HareCard("Show"));
+            i++;
         }
         hareCards.add(new HareCard("Shuffle"));
         Collections.shuffle(hareCards);
+    }
+
+    public ArrayList<HareCard> getHareCards() {
+        return hareCards;
+    }
+
+    public HareCard getHareCard(int i) {
+        return hareCards.get(i);
     }
 
     private void createBoard() {
@@ -68,13 +74,6 @@ public class Board
         for(int t : tortoise){
         	squares.get(t).setSquareType("Tortoise");
         }
-        //====================================================
-        //
-        // Consider extending to a number class with additional
-        //	numberSquareType variable
-        // *********Low priority task***************************
-        //
-        //====================================================
         int[] number156 = {7,16,32,48,60};
         for(int n156 : number156){
         	squares.get(n156).setSquareType("Number (1,5,6)");
@@ -93,8 +92,12 @@ public class Board
         }
     }
 
-	public Square getSquare(int index) {
-		return squares.get(index);
+    public ArrayList<Square> getSquares() {
+        return squares;
+    }
+
+    public Square getSquare(int index) {
+        return squares.get(index);
     }
 
     public String listSquares() {
@@ -119,6 +122,16 @@ public class Board
      */
     public void addPlayer(Player player) {
         players.add(player);
+    }
+
+    /**
+     * Method to remove a player from the game
+     * @param index - the index of the player to be removed
+     */
+    public void removePlayer(int index) {
+        if ( (index >= 0) && (index < players.size() ) ) {
+            players.remove(index);
+        }
     }
 
     /**
@@ -147,16 +160,6 @@ public class Board
     }
 
     /**
-     * Method to remove a player from the game
-     * @param index - the index of the player to be removed
-     */
-    public void removePlayer(int index) {
-        if ( (index >= 0) && (index < players.size() ) ) {
-            players.remove(index);
-        }
-    }
-
-    /**
      * Method to get a player from the array list
      * @param index - the index of the player to be returned
      * @return the object of type Player corresponding to the given index
@@ -167,18 +170,6 @@ public class Board
 
     public ArrayList<Player> getPlayers() {
         return players;
-    }
-
-    public ArrayList<Square> getSquares() {
-        return squares;
-    }
-
-    public ArrayList<HareCard> getHareCards() {
-        return hareCards;
-    }
-
-    public HareCard getHareCard(int i) {
-        return hareCards.get(i);
     }
 }
 
