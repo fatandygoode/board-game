@@ -2,7 +2,6 @@ package controllers;
 
 import static utils.ScannerInput.*;
 
-import models.Board;
 import models.HareCard;
 import models.Player;
 import models.Square;
@@ -185,32 +184,20 @@ public class MenuController {
 			skipTurn();
 		}
 		else{ //display status
-
-				System.out.println(playerToMove.getPlayerName() + ", it's your turn\n");
-
-				//carry-over moves
-				if(playerToMove.getSquareCounter() > 0) {
-					runSquare(board.getSquare(playerToMove.getPlayerBoardPosition()),0);
-				}
-
+			System.out.println(playerToMove.getPlayerName() + ", it's your turn\n");
+			//carry-over moves
+			if(playerToMove.getSquareCounter() > 0) {
+				runSquare(board.getSquare(playerToMove.getPlayerBoardPosition()),0);
 			}
-			//===========================================================
-			displayStatus();
-
-			makeMove(); //starts next method to continue
+		}
+		displayStatus();
+		makeMove(); //starts next method to continue
 	}
 
 	private void displayStatus(){
 		System.out.println(playerToMove.toString());
-		int i = 0;
-		if(showCarrots){
-			while(i < board.players.size()){
-				System.out.println(message);
-				i++;
-			}
-			showCarrots = false;
+		System.out.println("Race Position: " + getRacePosition(playerToMove));
 		}
-	}
 
 	/**
 	 * Method to display the options available to the current player
@@ -218,7 +205,7 @@ public class MenuController {
 	private int gameMenu(){
 		System.out.println("\nIn Game Menu");
 		System.out.println("===============");
-		System.out.println("  1) Move forwards to a new square");
+		System.out.println("  1) Move to a new square");
 		System.out.println("  2) Draw or pay carrots");
 		System.out.println("===============");
 		System.out.println("  3) Display the full board");
@@ -236,41 +223,16 @@ public class MenuController {
 		int gameMenuOption = gameMenu();//puts user's choice through switch loop
 
 		switch (gameMenuOption){
-		case 1://move forward to a new square
+		case 1:
 			moveSquare();
 			break;
-
 		case 2:
-			Square currentSquare = board.getSquare(playerToMove.getPlayerBoardPosition());
-			if(currentSquare.getSquareType().equals("Carrot")){
-				String input = (validNextString("Chew or draw carrots? (C/D)?"));
-				input = input.toUpperCase();
-				switch (input){
-					case "C":
-						playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() - 10);
-						turnComplete = true;
-						System.out.println(playerToMove.getPlayerName() + " chewed 10 carrots!");
-						pause();
-						break;
-					case "D":
-						playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() + 10);
-						turnComplete = true;
-						System.out.println(playerToMove.getPlayerName() + " drew 10 carrots!");
-						pause();
-						break;
-					default:
-						errorMessage("Invalid option entered");
-						break;
-				}
-			}
-			else{
-				errorMessage("Not on a carrot square!");
-			}
+			chewCarrots();
 			break;
 		case 3:
 			System.out.println(board.listSquares());
 			break;
-		case 0://return to main menu
+		case 0:
 			runMenu();
 			break;
 		default:
@@ -278,6 +240,34 @@ public class MenuController {
 			break;
 		}
 		nextPlayer();
+	}
+
+	private void chewCarrots(){
+		Square currentSquare = board.getSquare(playerToMove.getPlayerBoardPosition());
+		if(currentSquare.getSquareType().equals("Carrot")){
+			String input = (validNextString("Chew or draw carrots? (C/D)?"));
+			input = input.toUpperCase();
+			switch (input){
+				case "C":
+					playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() - 10);
+					turnComplete = true;
+					System.out.println(playerToMove.getPlayerName() + " chewed 10 carrots!");
+					pause();
+					break;
+				case "D":
+					playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() + 10);
+					turnComplete = true;
+					System.out.println(playerToMove.getPlayerName() + " drew 10 carrots!");
+					pause();
+					break;
+				default:
+					errorMessage("Invalid option entered");
+					break;
+			}
+		}
+		else{
+			errorMessage("Not on a carrot square!");
+		}
 	}
 
 	/**
@@ -313,7 +303,7 @@ public class MenuController {
 	private void errorMessage(String error){
 		System.out.println(error);
 		pause();
-		runGame();
+		makeMove();
 	}
 
 	private void validSquare(){
@@ -331,13 +321,19 @@ public class MenuController {
 		}
 	}
 
-	private void moveBack() {
-		if(playerToMove.getPlayerBoardPosition() < 15){
-			errorMessage("No tortoise squares behind!");
+	private int getRacePosition(Player playerToMove){
+		int racePosition = board.numberOfPlayers();
+		for(Player player : board.getPlayers()){
+			if(playerToMove.getPlayerBoardPosition() > player.getPlayerBoardPosition()){
+				racePosition--;
+			}
 		}
-		else{
-			int nearestTortoiseSquareNumber = 15;
-			int[] tortoise = {15,19,24,30,37,43,50,56};
+		return racePosition;
+	}
+
+	private void moveBack() {
+			int nearestTortoiseSquareNumber = 11;
+			int[] tortoise = {11,15,19,24,30,37,43,50,56};
 			for(int t : tortoise) {
 				while(t < playerToMove.getPlayerBoardPosition()){
 					nearestTortoiseSquareNumber = t;
@@ -348,13 +344,13 @@ public class MenuController {
 					playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() + 10 * (playerToMove.getPlayerBoardPosition() - nearestTortoiseSquareNumber));
 					playerToMove.setPlayerBoardPosition(nearestTortoiseSquareNumber);
 					displayStatus();
+					turnComplete = true;
 				}
 				else{
-					runGame();
+					makeMove();
 				}
 			}
 		}
-	}
 
 	private void squareUnoccupied(int positionToMoveTo){
 		Square squareToMoveTo = board.getSquare(positionToMoveTo);
@@ -416,7 +412,9 @@ public class MenuController {
 			Square squareToMoveFrom = board.getSquare(playerToMove.getPlayerBoardPosition());
 			Square squareToMoveTo = board.getSquare(positionToMoveTo);
 			squareToMoveFrom.setOccupied(false);
-			squareToMoveTo.setOccupied(true);
+			if(squareToMoveTo != board.getSquare(64)){
+				squareToMoveTo.setOccupied(true);
+			}
 			playerToMove.setPlayerBoardPosition(positionToMoveTo);
 			playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() - carrotCost);
 			playerToMove.setSquareCounter(0);
@@ -454,42 +452,53 @@ public class MenuController {
 				runNumber(4);
 				break;
 			default:
-
 				break;
 		}
 	}
 
 	private void runNumber(int numberSquareType) {
 		int squareCounter = playerToMove.getSquareCounter();
+		if(squareCounter == 0){
+			System.out.println("Crunching the numbers");
+		}
+		else{
+			if(numberSquareType == getRacePosition(playerToMove)){
+				int numberOfCarrots = playerToMove.getNumberOfCarrots() + 10 * numberSquareType;
+				playerToMove.setNumberOfCarrots(numberOfCarrots);
+				System.out.println(playerToMove.getPlayerName() + " gained " + 10 * numberSquareType + " carrots!\n");
+				pause();
+			}
+		}
 		squareCounter++;
 		playerToMove.setSquareCounter(squareCounter);
-		if(numberSquareType == playerToMove.getRacePosition() && squareCounter > 0){
-			int numberOfCarrots = playerToMove.getNumberOfCarrots() + 10 * numberSquareType;
-			playerToMove.setNumberOfCarrots(numberOfCarrots);
-			System.out.println(playerToMove.getPlayerName() + " gained " + 10 * numberSquareType + " carrots!\n");
-			pause();
-		}
 	}
 
 	private void runLettuce() {
 		int squareCounter = playerToMove.getSquareCounter();
 		squareCounter++;
 		playerToMove.setSquareCounter(squareCounter);
-		if(squareCounter == 1){
-			playerToMove.chewALettuce();
-			System.out.println(playerToMove.getPlayerName() + " has " + playerToMove.getNumberOfLettuces() + " lettuces left!\n");
-			skipTurn();
-		}
-		if(squareCounter == 2){
-			int numberOfCarrots = playerToMove.getNumberOfCarrots() + 10 * playerToMove.getRacePosition();
-			playerToMove.setNumberOfCarrots(numberOfCarrots);
-			System.out.println(playerToMove.getPlayerName() + " gained " + 10 * playerToMove.getRacePosition() + " carrots!\n");
-			pause();
+		switch (squareCounter){
+			case 1:
+				System.out.println("Chewing a lettuce...");
+				break;
+			case 2:
+				playerToMove.chewALettuce();
+				System.out.println("Hares eat their shit, wait another turn");
+				skipTurn();
+				break;
+			case 3:
+				int numberOfCarrots = playerToMove.getNumberOfCarrots() + 10 * getRacePosition(playerToMove);
+				playerToMove.setNumberOfCarrots(numberOfCarrots);
+				System.out.println(playerToMove.getPlayerName() + " gained " + 10 * getRacePosition(playerToMove) + " carrots!" + playerToMove.getNumberOfLettuces() + "lettuces left !\n");
+				pause();
+				break;
+			default:
+				break;
 		}
 	}
 
 	private void runHare(int carrotCost) {
-		System.out.println("Draw a hare card!");
+		/*System.out.println("Draw a hare card!");
 		HareCard nextHareCard = board.getHareCard(hareCardDeck);
 		String hareCardType = nextHareCard.getHareCardType();
 		this.hareCardDeck++;
@@ -520,7 +529,7 @@ public class MenuController {
 				}
 				break;
 			case "MissTurn":
-				if(board.players.size() / playerToMove.getRacePosition() >= 2){
+				if(board.players.size() / getRacePosition(playerToMove) >= 2){
 					skipTurn();
 				}
 				break;
@@ -532,7 +541,7 @@ public class MenuController {
 					skipTurn();
 				}
 				else {
-					int numberOfCarrots = playerToMove.getNumberOfCarrots() + 10 * playerToMove.getRacePosition();
+					int numberOfCarrots = playerToMove.getNumberOfCarrots() + 10 * getRacePosition(playerToMove);
 					playerToMove.setNumberOfCarrots(numberOfCarrots);
 				}
 				break;
@@ -554,7 +563,7 @@ public class MenuController {
 				break;
 			default:
 				break;
-		}
+		}*/
 	}
 
 	private void reset(){

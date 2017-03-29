@@ -2,7 +2,7 @@ package models;
 
 public class Player {
 	private String playerName;
-	private int numberOfCarrots, numberOfLettuces, playerBoardPosition, squareCounter, racePosition;
+	private int numberOfCarrots, numberOfLettuces, playerBoardPosition, squareCounter;
 	private boolean isFinished;
 
 
@@ -17,7 +17,6 @@ public class Player {
 		this.setPlayerName(playerName);
 		setNumberOfCarrots(65);
 		this.numberOfLettuces = 3;
-		setRacePosition(5);
 	}
 
 	/**
@@ -106,16 +105,8 @@ public class Player {
 		return 	"Player: " + playerName +
 				"\nCarrots: " + numberOfCarrots +
 				"\tLettuces: " + numberOfLettuces +
-				"\nBoard Position: " + playerBoardPosition +
-				"\tRace Position: " + racePosition;
-	}
+				"\nBoard Position: " + playerBoardPosition;}
 
-	public int getRacePosition() {
-		return racePosition;
-	}
-	public void setRacePosition(int racePosition) {
-		this.racePosition = racePosition;
-	}
 
 	/**
 	 * @return the squareCounter
