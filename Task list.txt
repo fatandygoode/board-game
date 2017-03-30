@@ -1,27 +1,9 @@
-Line 197, 225
-Write a method for game menu option 2 i.e. move backwards to a tortoise square * bos
+Hare square methods
 
-Line 198, 229
-Write a method for game menu option 3 i.e. draw/pay carrots (only if on carrot square) * sm
+Method to check if no valid moves are available
 
-Line 275
-Only allow forward moves for option 1 * sm
-do not allow to go beyond finish * sm
+Extra features?
 
-Line 290
-Write a method to return a player's place in the race ** pk
+In game formatting
 
-Line 300
-Write a method to return the square type a player has moved to on a forward move * bos
-Invoke the relevant actions to take * bos
-
-Write methods for these actions i.e. what happens after moving to hare/lettuce/number/carrot square **
-(4 separate methods) take one each
-i.e. 	private void hare(){	etc.
-	###########################
-	=============================
-	############################
-	}
-
-Catch index out of bounds exception (scanner input class)
-
+Javadoc, comments, indentation
