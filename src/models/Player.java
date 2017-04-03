@@ -1,9 +1,9 @@
 package models;
 
 public class Player {
-	private String playerName;
-	private int numberOfCarrots, numberOfLettuces, playerBoardPosition, squareCounter;
-	private boolean isFinished, skipNextTurn;
+		private String playerName;
+		private int numberOfCarrots, numberOfLettuces, playerBoardPosition, squareCounter, messageCounter;
+		private boolean isFinished, skipNextTurn;
 
 	/**
 	 * Constructor for objects of class Player
@@ -131,5 +131,16 @@ public class Player {
 	public void setSkipNextTurn(boolean skipNextTurn) {
 		this.skipNextTurn = skipNextTurn;
 	}
-}
 
+	public String showMessage() {
+		return playerName + " has " + numberOfCarrots + " carrots!";
+	}
+
+	public int getMessageCounter() {
+		return messageCounter;
+	}
+
+	public void setMessageCounter(int messageCounter) {
+		this.messageCounter = messageCounter;
+	}
+}

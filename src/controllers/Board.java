@@ -25,17 +25,17 @@ public class Board
 
     private void createDeck() {
         int i = 0;
-        while(i < 2){
-            hareCards.add(new String("Give10"));
-            hareCards.add(new String("MissTurn"));
-            hareCards.add(new String("Restore65"));
-            hareCards.add(new String("Draw10"));
-            hareCards.add(new String("FreeRide"));
-            hareCards.add(new String("LoseHalf"));
-            hareCards.add(new String("Show"));
+        while(i < 1){
+            hareCards.add(new String("Give 10 carrots to each player lying behind you in the race (if any).\nIf you haven't enough carrots, give them five each; if still not possible, one each.\nA player who doesn't want extra carrots may discard them"));
+            hareCards.add(new String("If there are more players behind you than in front of you, miss a turn. If not, play again. If equal, of course play again."));
+            hareCards.add(new String("Restore your carrot holding to exactly 65!"));
+            hareCards.add(new String("Draw 10 Carrots for each lettuce you still hold. If you have none left, miss a turn."));
+            hareCards.add(new String("Free Ride! Your Last turn costs nothing; retrieve the carrots you paid to reach this square"));
+            hareCards.add(new String("Lose half your carrots! If an odd number, keep the odd one."));
+            hareCards.add(new String("Show us your carrots! Show your carrots so everyone knows how many you have left"));
             i++;
         }
-        hareCards.add(new String("Shuffle"));
+        hareCards.add(new String("Shuffle The hare cards and receive from each player 1 carrot for doing so"));
         Collections.shuffle(hareCards);
     }
 
@@ -102,7 +102,7 @@ public class Board
     public String listSquares() {
         String list = "";
         for (int i = 1; i < squares.size()-1; i = i + 3) {
-                list = list + i + squares.get(i).toString() + "\t\t\t\t\t" + (i+1) + squares.get(i+1) + "\t\t\t\t\t" + (i+2) + squares.get(i+2) + "\n";
+                list = list + i + squares.get(i).toString() + "\t\t\t" + (i+1) + squares.get(i+1) + "\t\t\t" + (i+2) + squares.get(i+2) + "\n";
         }
         return 0 + squares.get(0).toString() + "\n" + list + 64 + squares.get(64).toString();
     }
