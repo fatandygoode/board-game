@@ -32,7 +32,7 @@ public class Square
     public String toString() {
     	String occupied = "";
     	if (isOccupied) {
-    		occupied = "occupied";
+    		occupied = "*";
     	}
     	return "\t" + squareType + "\t" + occupied;
     }

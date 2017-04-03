@@ -14,17 +14,13 @@ public class ScannerInput {
 				System.out.print(prompt);
 				return Integer.parseInt( input.next() );
 			}
-			catch (NumberFormatException | IndexOutOfBoundsException e) {
+			catch (NumberFormatException e) {
 				System.err.println("\tEnter a valid number please.");
 			}
 		}
 		while (true);
 	}
 
-	public static boolean validNextIndex(ArrayList<Object> arrayList, int index) {
-		return index < arrayList.size();
-	}
-	
 	@SuppressWarnings("resource")
 	public static String validNextString(String prompt)
 	{

@@ -1,6 +1,5 @@
 package controllers;
 
-import models.HareCard;
 import models.Player;
 import models.Square;
 
@@ -11,7 +10,7 @@ public class Board
 {
     private ArrayList<Square> squares;
     private ArrayList<Player> players;
-    private ArrayList<HareCard> hareCards;
+    private ArrayList<String> hareCards;
     /**
      * Constructor for objects of class Board
      */
@@ -27,25 +26,25 @@ public class Board
     private void createDeck() {
         int i = 0;
         while(i < 2){
-            hareCards.add(new HareCard("Give10"));
-            hareCards.add(new HareCard("MissTurn"));
-            hareCards.add(new HareCard("Restore65"));
-            hareCards.add(new HareCard("Draw10"));
-            hareCards.add(new HareCard("FreeRide"));
-            hareCards.add(new HareCard("LoseHalf"));
-            hareCards.add(new HareCard("Show"));
+            hareCards.add(new String("Give10"));
+            hareCards.add(new String("MissTurn"));
+            hareCards.add(new String("Restore65"));
+            hareCards.add(new String("Draw10"));
+            hareCards.add(new String("FreeRide"));
+            hareCards.add(new String("LoseHalf"));
+            hareCards.add(new String("Show"));
             i++;
         }
-        hareCards.add(new HareCard("Shuffle"));
+        hareCards.add(new String("Shuffle"));
         Collections.shuffle(hareCards);
     }
 
-    public ArrayList<HareCard> getHareCards() {
+    public ArrayList<String> getHareCards() {
         return hareCards;
     }
 
-    public HareCard getHareCard(int i) {
-        return hareCards.get(i);
+    public String getHareCard(int index) {
+        return hareCards.get(index);
     }
 
     private void createBoard() {
@@ -55,40 +54,40 @@ public class Board
     		i++;
     	}
         
-    	squares.get(0).setSquareType("Start");
-    	squares.get(64).setSquareType("Finish");
+    	squares.get(0).setSquareType("----Start---");
+    	squares.get(64).setSquareType("---Finish---");
         
         int[] carrot = {2,5,13,21,26,33,38,40,49,55,59,61,63};
         for(int c : carrot){
-        	squares.get(c).setSquareType("Carrot");
+        	squares.get(c).setSquareType("---Carrot---");
         }
         int[] hare = {1,3,6,14,25,31,34,39,46,51,58,62};
         for(int h : hare) {
-        	squares.get(h).setSquareType("Hare");
+        	squares.get(h).setSquareType("----Hare----");
         }
         int[] lettuce = {10,22,42,57};
         for(int l : lettuce){
-        	squares.get(l).setSquareType("Lettuce");
+        	squares.get(l).setSquareType("--Lettuce---");
         }	
         int[] tortoise = {11,15,19,24,30,37,43,50,56};
         for(int t : tortoise){
-        	squares.get(t).setSquareType("Tortoise");
+        	squares.get(t).setSquareType("--Tortoise--");
         }
         int[] number156 = {7,16,32,48,60};
         for(int n156 : number156){
-        	squares.get(n156).setSquareType("Number (1,5,6)");
+        	squares.get(n156).setSquareType("--#(1,5,6)--");
         }
         int[] number2 = {8,17,23,29,35,41,47,53};
         for(int n2 : number2){
-        	squares.get(n2).setSquareType("Number (2)");
+        	squares.get(n2).setSquareType("----#(2)----");
         }
         int[] number3 = {4,12,20,28,36,44,52};
         for(int n3 : number3){
-        	squares.get(n3).setSquareType("Number (3)");
+        	squares.get(n3).setSquareType("----#(3)----");
         }
         int[] number4 = {9,18,27,45,54};
         for(int n4 : number4){
-        	squares.get(n4).setSquareType("Number (4)");
+        	squares.get(n4).setSquareType("----#(4)----");
         }
     }
 
@@ -102,11 +101,10 @@ public class Board
 
     public String listSquares() {
         String list = "";
-        for (int index = 0; index < squares.size(); index++) {
-            //NumberSquare squareToDisplay = getSquare(index);
-            list = "\n" + list + index + squares.get(index).toString() + "\n";
+        for (int i = 1; i < squares.size()-1; i = i + 3) {
+            list = list + i + squares.get(i).toString() + "\t\t\t\t\t" + (i+1) + squares.get(i+1) + "\t\t\t\t\t" + (i+2) + squares.get(i+2) + "\n";
         }
-        return list;
+        return 0 + squares.get(0).toString() + "\n" + list + 64 + squares.get(64).toString();
     }
 
     private void addPlayers(){ //to help run the console quicker. delete when finished
@@ -149,7 +147,7 @@ public class Board
     public String listPlayers() {
         String list = "";
         for (int index = 0; index < players.size(); index++) {
-            list = "\n" + list + index + " - " + players.get(index).getPlayerName() + "\n";
+            list = list + index + " - " + players.get(index).getPlayerName() + "\n";
         }
         if (list.equals("")) {
             return "No players";
