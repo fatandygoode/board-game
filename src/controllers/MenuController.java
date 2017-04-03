@@ -241,7 +241,7 @@ public class MenuController {
 				validSquare(playerToMove);//series of helper methods
 				break;
 			case 2:
-				chewCarrots(playerToMove);
+				chewCarrots(playerToMove, false);
 				break;
 			case 3:
 				moveBack(playerToMove, false);
@@ -264,31 +264,33 @@ public class MenuController {
 		nextPlayer();
 	}
 
-	private void chewCarrots(Player playerToMove) {
-		Square currentSquare = board.getSquare(playerToMove.getPlayerBoardPosition());
+	private void chewCarrots(Player playerToMove, boolean testing) {
+		int currentPosition = playerToMove.getPlayerBoardPosition();
+		Square currentSquare = board.getSquare(currentPosition);
 		if (currentSquare.getSquareType().equals("---Carrot---")) {
 			String input = (validNextString("Chew or draw carrots? (C/D)?"));
 			input = input.toUpperCase();
 			switch (input) {
 				case "C":
 					playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() - 10);
-					turnComplete = true;
 					System.out.println(playerToMove.getPlayerName() + " chewed 10 carrots!");
-					pause();
+					completeMove(playerToMove, currentSquare, currentPosition, 0, testing);
 					break;
 				case "D":
 					playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() + 10);
-					turnComplete = true;
 					System.out.println(playerToMove.getPlayerName() + " drew 10 carrots!");
-					pause();
+					completeMove(playerToMove, currentSquare, currentPosition, 0, testing);
 					break;
 				default:
-					errorMessage("Invalid option entered", playerToMove);
+					System.out.println("Invalid option entered");
+					makeMove(playerToMove);
 					break;
 			}
 		}
 		else {
-			errorMessage("Not on a carrot square!", playerToMove);
+			if(!testing){
+				errorMessage("Not on a carrot square!", playerToMove);
+			}
 		}
 	}
 
@@ -307,12 +309,12 @@ public class MenuController {
 	}
 
 	private void testMoves(Player playerToMove){
-		boolean testing = true;
 		int currentPosition = playerToMove.getPlayerBoardPosition();
 		for(int positionToMoveTo = currentPosition + 1; positionToMoveTo < 65; positionToMoveTo++){
-			squareUnoccupied(playerToMove, board.getSquare(positionToMoveTo), positionToMoveTo, testing);
+			squareUnoccupied(playerToMove, board.getSquare(positionToMoveTo), positionToMoveTo, true);
 		}
-		moveBack(playerToMove, testing);
+		moveBack(playerToMove, true);
+		chewCarrots(playerToMove, true);
 	}
 
 	private void moveBack(Player playerToMove, boolean testing){
@@ -407,6 +409,9 @@ public class MenuController {
 			if(squareToMoveTo.getSquareType().equals("--Tortoise--")){
 				input = validNextString("Do you want to move to square #" + positionToMoveTo + "? (Y/N)");
 			}
+			else if(squareToMoveTo.getSquareType().equals("---Carrot---")){
+				input = "y";
+			}
 			else{
 				input = validNextString("This will use " + carrotCost + " carrots. Do you wish to continue? (Y/N)");
 			}
@@ -441,6 +446,9 @@ public class MenuController {
 
 	private void runSquare(Player playerToMove, Square squareToMoveTo, int spacesMoved, int carrotCost){
 		switch(squareToMoveTo.getSquareType()){
+			case "---Carrot---":
+				System.out.println("Carrot");
+				break;
 			case "----Hare----":
 				runHare(playerToMove, carrotCost);
 				break;

@@ -102,7 +102,7 @@ public class Board
     public String listSquares() {
         String list = "";
         for (int i = 1; i < squares.size()-1; i = i + 3) {
-            list = list + i + squares.get(i).toString() + "\t\t\t\t\t" + (i+1) + squares.get(i+1) + "\t\t\t\t\t" + (i+2) + squares.get(i+2) + "\n";
+                list = list + i + squares.get(i).toString() + "\t\t\t\t\t" + (i+1) + squares.get(i+1) + "\t\t\t\t\t" + (i+2) + squares.get(i+2) + "\n";
         }
         return 0 + squares.get(0).toString() + "\n" + list + 64 + squares.get(64).toString();
     }
