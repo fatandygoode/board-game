@@ -250,7 +250,10 @@ public class MenuController {
 				System.out.println(board.listSquares());
 				break;
 			case 5:
+				System.out.println("The following squares are available to move to: ");
 				testMoves(playerToMove);
+				pause();
+				makeMove(playerToMove);
 			case 0:
 				runMenu();
 				break;
@@ -326,15 +329,17 @@ public class MenuController {
 			squareUnoccupied(playerToMove, squareToMoveTo, positionToMoveTo, testing);
 		}
 		else{
-			if(!testing){errorMessage("Invalid option. No tortoise squares behind you!", playerToMove);}
-			else{testResults(playerToMove, positionToMoveTo, false);}
+			if(!testing){
+				errorMessage("Invalid option. No tortoise squares behind you!", playerToMove);
+			}
 		}
 	}
 
 	private void squareUnoccupied(Player playerToMove, Square squareToMoveTo, int positionToMoveTo, boolean testing){
 		if(squareToMoveTo.isOccupied()){
-			if(!testing){errorMessage("Invalid move! Square is occupied!", playerToMove);}
-			else{testResults(playerToMove, positionToMoveTo, false);}
+			if(!testing){
+				errorMessage("Invalid move! Square is occupied!", playerToMove);
+			}
 		}
 		else {
 			enoughCarrots(playerToMove, squareToMoveTo, positionToMoveTo, testing);
@@ -352,8 +357,9 @@ public class MenuController {
 			validMove(playerToMove, squareToMoveTo, positionToMoveTo, carrotCost, testing);
 		}
 		else {
-			if(!testing){errorMessage("You do not have enough carrots for this move", playerToMove);}
-			else{testResults(playerToMove, positionToMoveTo, false);}
+			if(!testing){
+				errorMessage("You do not have enough carrots for this move", playerToMove);
+			}
 		}
 	}
 
@@ -363,8 +369,9 @@ public class MenuController {
 				if (playerToMove.getNumberOfLettuces() > 0) {
 					completeMove(playerToMove, squareToMoveTo, positionToMoveTo, carrotCost, testing);
 				} else {
-					if(!testing){errorMessage("Can't move to a lettuce square unless number of lettuces is non-zero", playerToMove);}
-					else{testResults(playerToMove, positionToMoveTo, false);}
+					if(!testing){
+						errorMessage("Can't move to a lettuce square unless number of lettuces is non-zero", playerToMove);
+					}
 				}
 				break;
 			case "---Finish---":
@@ -373,8 +380,9 @@ public class MenuController {
 					numberOfPlayersFinished++;
 					completeMove(playerToMove, squareToMoveTo, positionToMoveTo, carrotCost, testing);
 				} else {
-					if(!testing){errorMessage("Invalid move! Lose any remaining lettuces and get you number of carrots to below " + 10 * (1 + numberOfPlayersFinished) + " to finish.", playerToMove);}
-					else{testResults(playerToMove, positionToMoveTo, false);}
+					if(!testing){
+						errorMessage("Invalid move! Lose any remaining lettuces and get you number of carrots to below " + 10 * (1 + numberOfPlayersFinished) + " to finish.", playerToMove);
+					}
 				}
 				break;
 			case "--Tortoise--":
@@ -382,8 +390,9 @@ public class MenuController {
 					completeMove(playerToMove, squareToMoveTo, positionToMoveTo, carrotCost, testing);
 				}
 				else{
-					if(!testing){errorMessage("Invalid move! Can only move backwards to a tortoise square!", playerToMove);}
-					else{testResults(playerToMove, positionToMoveTo, false);}
+					if(!testing){
+						errorMessage("Invalid move! Can only move backwards to a tortoise square!", playerToMove);
+					}
 				}
 				break;
 			default:
@@ -426,13 +435,8 @@ public class MenuController {
 			}
 		}
 		else{
-			boolean moveAvailable = true;
-			testResults(playerToMove, positionToMoveTo, moveAvailable);
+			System.out.println(positionToMoveTo);
 		}
-	}
-
-	private void testResults(Player playerToMove, int positionToMoveTo, boolean moveAvailable){
-		if(moveAvailable){System.out.println(positionToMoveTo);}
 	}
 
 	private void runSquare(Player playerToMove, Square squareToMoveTo, int spacesMoved, int carrotCost){
