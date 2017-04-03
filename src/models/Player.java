@@ -2,28 +2,24 @@ package models;
 
 public class Player {
 	private String playerName;
-	private int numberOfCarrots;
-	private int numberOfLettuces;
-	private int boardPosition;
-	private int racePosition;
-	
+	public int numberOfCarrots, numberOfLettuces, playerBoardPosition, squareCounter, messageCounter;
+	private boolean isFinished, skipNextTurn, showCarrots;
+
 	/**
-     * Constructor for objects of class Player
-     * 
-     * @param playerName Name of the player
-     * 
-     */
+	 * Constructor for objects of class Player
+	 *
+	 * @param playerName Name of the player
+	 */
 	public Player(String playerName) {
-		
-        this.setPlayerName(playerName);
+		this.setPlayerName(playerName);
 		setNumberOfCarrots(65);
-		setNumberOfLettuces(3);
-		setRacePosition(0);	
-		setBoardPosition(0);
-    }
-	
+		this.numberOfLettuces = 3;
+		messageCounter = 0;
+	}
+
 	/**
 	 * Method to get a player's name
+	 *
 	 * @return the player's name
 	 */
 	public String getPlayerName() {
@@ -32,6 +28,7 @@ public class Player {
 
 	/**
 	 * Method to change a player's name
+	 *
 	 * @param playerName - the new name for the player
 	 */
 	public void setPlayerName(String playerName) {
@@ -40,6 +37,7 @@ public class Player {
 
 	/**
 	 * Method to get the number of carrots a player has
+	 *
 	 * @return the number of carrots the player has
 	 */
 	public int getNumberOfCarrots() {
@@ -48,6 +46,7 @@ public class Player {
 
 	/**
 	 * Method to update the number of carrots a player has
+	 *
 	 * @param numberOfCarrots - the new number of carrots for the player
 	 */
 	public void setNumberOfCarrots(int numberOfCarrots) {
@@ -56,6 +55,7 @@ public class Player {
 
 	/**
 	 * Method to get the number of lettuces a player has left
+	 *
 	 * @return the number of lettuce the player has left
 	 */
 	public int getNumberOfLettuces() {
@@ -64,53 +64,101 @@ public class Player {
 
 	/**
 	 * Method to update the number of lettuces a player has
-	 * @param numberOfLettuces - the new number of lettuces for the player
 	 */
-	public void setNumberOfLettuces(int numberOfLettuces) {
-		this.numberOfLettuces = numberOfLettuces;
+	public void chewALettuce() {
+		this.numberOfLettuces--;
 	}
 
 	/**
 	 * Method to get a player's current board position
+	 *
 	 * @return the player's current board position
 	 */
-	public int getBoardPosition() {
-		return boardPosition;
+	public int getPlayerBoardPosition() {
+		return playerBoardPosition;
 	}
 
 	/**
 	 * Method to move a player to a new board position
-	 * @param boardPosition - the player's new board position
+	 *
+	 * @param playerBoardPosition - the player's new board position
 	 */
-	public void setBoardPosition(int boardPosition) {
-		this.boardPosition = boardPosition;
+	public void setPlayerBoardPosition(int playerBoardPosition) {
+		this.playerBoardPosition = playerBoardPosition;
 	}
 
 	/**
-	 * Method to get a player's race position
-	 * @return the player's current place in the race
+	 * @return the isFinished
 	 */
-	public int getRacePosition() {
-		return racePosition;
+	public boolean isFinished() {
+		return isFinished;
 	}
 
-	/**
-	 * Method to update a player's race postion
-	 * @param racePosition - the player's new place in the race
-	 */
-	public void setRacePosition(int racePosition) {
-		this.racePosition = racePosition;
+	public void setFinished() {
+		this.isFinished = true;
 	}
-	
+
 	/**
 	 * Method to return a string listing the player's attributes
+	 *
 	 * @return a string listing the player's attributes
 	 */
 	public String toString() {
-		return 	"Player: " + playerName +
+		return "Player: " + playerName +
 				"\nCarrots: " + numberOfCarrots +
 				"\tLettuces: " + numberOfLettuces +
-				"\nBoard Position: " + boardPosition +
-				"\tRace Position: " + racePosition + "";
+				"\nBoard Position: " + playerBoardPosition;
+	}
+
+	/**
+	 * @return the squareCounter
+	 */
+	public int getSquareCounter() {
+		return squareCounter;
+	}
+
+	/**
+	 * @param squareCounter the squareCounter to set
+	 */
+	public void setSquareCounter(int squareCounter) {
+		this.squareCounter = squareCounter;
+	}
+
+
+	public boolean isSkipNextTurn() {
+		return skipNextTurn;
+	}
+
+	public void setSkipNextTurn(boolean skipNextTurn) {
+		this.skipNextTurn = skipNextTurn;
+	}
+	
+	public boolean getShowCarrots()
+	{
+		return showCarrots;
+	}
+	
+	public void setShowCarrots(boolean showCarrots)
+	{
+		this.showCarrots = showCarrots;
+	}
+	
+	public String showMessage()
+	{
+		return playerName + " has " + numberOfCarrots + " carrots!";
+	}
+	
+	public int getMessageCounter()
+	{
+		return messageCounter;
+	}
+	public void setMessageCounter(int messageCounter)
+	{
+		this.messageCounter = messageCounter;
+		if(messageCounter == 0)
+		{
+			showCarrots = false;
+		}
 	}
 }
+
