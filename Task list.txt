@@ -1,6 +1,4 @@
-Hare square methods
-
-Method to check if no valid moves are available
+Can't let carrot count go below zero
 
 Extra features?
 
