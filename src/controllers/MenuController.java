@@ -32,7 +32,7 @@ public class MenuController {
 	private MenuController() {
 		board = new Board();
 		availableMoves = new ArrayList<>();
-		//firstLaunch = true;
+		firstLaunch = true;
 		runMenu();
 	}
 
@@ -159,14 +159,20 @@ public class MenuController {
 	 * Method to run the game
 	 */
 	private void runGame() {
-		/*	commented out to speed up console, uncomment when finished
 		 	if(firstLaunch) {//welcome message only on first launch
-			System.out.println("<<=====>>");
-			System.out.println("Welcome");
-			System.out.println("<<=====>>");
-			firstLaunch = false;
-			pause();
-		}*/
+			   System.out.println(" _____________________________________________________________________\n");
+			   System.out.println("          ,\\                                                   ");
+			   System.out.println("          \\\\\\,_        <<<<<<<<<<>>>>>>>>>>>                         ");
+			   System.out.println("           \\` ,\\       #####################                    __   ");
+			   System.out.println("      __,.-\" =__)      =====================         .,-;-;-,. /'_\\  ");
+			   System.out.println("    .\"        )	       ***   WELCOME!    ***       _/_/_/_|_\\_\\) /   ");
+			   System.out.println(" ,_/   ,    \\/\\_       =====================    '-<_><_><_><_>=/\'\\   ");
+			   System.out.println(" \\_|    )_-\\ \\_-`      #####################        `/_/====/_/-'\\_\\ ");
+			   System.out.println("    `-----` `--`       <<<<<<<<<<>>>>>>>>>>>    	 \"\"     \"\"    \"\" ");
+			   System.out.println(" _____________________________________________________________________");
+			   firstLaunch = false;
+			   pause();
+		 	}
 
 		//turn starts here
 		Player playerToMove = board.getPlayer(turnCounter);
