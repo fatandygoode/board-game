@@ -8,9 +8,9 @@ import java.util.Collections;
 
 public class Board
 {
-    private ArrayList<Square> squares;
+    private final ArrayList<Square> squares;
     private ArrayList<Player> players;
-    private ArrayList<String> hareCards;
+    private final ArrayList<String> hareCards;
     /**
      * Constructor for objects of class Board
      */
@@ -25,17 +25,17 @@ public class Board
 
     private void createDeck() {
         int i = 0;
-        while(i < 1){
+        while(i < 2){
             hareCards.add(new String("Give 10 carrots to each player lying behind you in the race (if any).\nIf you haven't enough carrots, give them five each; if still not possible, one each.\nA player who doesn't want extra carrots may discard them"));
-            hareCards.add(new String("If there are more players behind you than in front of you, miss a turn. If not, play again. If equal, of course play again."));
             hareCards.add(new String("Restore your carrot holding to exactly 65!"));
             hareCards.add(new String("Draw 10 Carrots for each lettuce you still hold. If you have none left, miss a turn."));
             hareCards.add(new String("Free Ride! Your Last turn costs nothing; retrieve the carrots you paid to reach this square"));
             hareCards.add(new String("Lose half your carrots! If an odd number, keep the odd one."));
             hareCards.add(new String("Show us your carrots! Show your carrots so everyone knows how many you have left"));
+            hareCards.add(new String("If there are more players behind you than in front of you, miss a turn. If not, play again. If equal, of course play again."));
             i++;
         }
-        hareCards.add(new String("Shuffle The hare cards and receive from each player 1 carrot for doing so"));
+        hareCards.add(new String("Shuffle the hare cards and receive from each player 1 carrot for doing so"));
         Collections.shuffle(hareCards);
     }
 

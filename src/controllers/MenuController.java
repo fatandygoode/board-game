@@ -17,7 +17,7 @@ import java.util.Collections;
  *
  */
 public class MenuController {
-	private Board board;
+	private final Board board;
 	private int turnCounter, numberOfPlayersFinished, hareCardDeck;
 	private boolean gameInProgress, turnComplete, firstLaunch;
 	private ArrayList<Integer> availableMoves;
@@ -158,7 +158,7 @@ public class MenuController {
 	/**
 	 * Method to run the game
 	 */
-	private void runGame() {
+	private void runGame() {//ref: http://www.ascii-code.com/ascii-art
 		 	if(firstLaunch) {//welcome message only on first launch
 			   System.out.println(" _____________________________________________________________________\n");
 			   System.out.println("          ,\\                                                   ");
@@ -171,27 +171,28 @@ public class MenuController {
 			   System.out.println("    `-----` `--`       <<<<<<<<<<>>>>>>>>>>>    	 \"\"     \"\"    \"\" ");
 			   System.out.println(" _____________________________________________________________________");
 			   firstLaunch = false;
+			   Collections.shuffle(board.getPlayers());//randomise player order at the start
 			   pause();
 		 	}
 
 		//turn starts here
 		Player playerToMove = board.getPlayer(turnCounter);
 
-		if (playerToMove.isFinished()) {
+		if (playerToMove.isFinished()) {//skips a players turn if they are finished
 			skipTurn();
 		}
-		else if(playerToMove.isSkipNextTurn()){
+		else if(playerToMove.isSkipNextTurn()){//skips a players turn if instructed to do so as per game rules
 			playerToMove.setSkipNextTurn(false);
 			skipTurn();
 		}
-		else{ //display status
+		else{//message to display player turn
 			System.out.println(playerToMove.getPlayerName() + ", it's your turn");
-			//carry-over moves
+			//runs "carry-over" moves
 			if (playerToMove.getSquareCounter() > 0) {
 				runSquare(playerToMove, board.getSquare(playerToMove.getPlayerBoardPosition()), 0, 0);
 			}
 		}
-		String message = "";
+		String message = "";//display full status incl. show your carrots message when applicable
 		for(Player player : board.getPlayers()){
 			if(player.getMessageCounter() > 1){
 				message = message + player.showMessage();
@@ -214,7 +215,8 @@ public class MenuController {
 		System.out.println("  3) Move backwards to a tortoise square");
 		System.out.println("===============");
 		System.out.println("  4) Display the full board");
-		System.out.println("  5) Check available moves");//auto show if none are available (to do)
+		System.out.println("  5) Check available moves");
+		System.out.println("  6) Display player status");
 		System.out.println("===============");
 		System.out.println("  0) Return to main menu");
 
@@ -247,21 +249,21 @@ public class MenuController {
 
 		switch (gameMenuOption) {
 			case 1:
-				validSquare(playerToMove);//series of helper methods
+				validSquare(playerToMove);//series of helper methods to move forwards
 				break;
 			case 2:
-				chewCarrots(playerToMove, false);
+				chewCarrots(playerToMove, false);//stay on carrot square and pay or draw carrots
 				break;
 			case 3:
-				moveBack(playerToMove, false);
+				moveBack(playerToMove, false);//move back to nearest tortoise square
 				break;
 			case 4:
-				System.out.println(board.listSquares());
+				System.out.println(board.listSquares());//list the full board
 				pause();
-				makeMove(playerToMove);//recursive call
+				makeMove(playerToMove);
 				break;
 			case 5:
-				testMoves(playerToMove);
+				testMoves(playerToMove);//check which moves are available, if none - reset
 				if(availableMoves.size() > 0){
 				System.out.println("The following squares are available to move to: ");
 					for(Integer i : availableMoves){
@@ -273,9 +275,12 @@ public class MenuController {
 				}
 				availableMoves.clear();
 				pause();
-				makeMove(playerToMove);//recursive call
+				makeMove(playerToMove);
+			case 6:
+				displayStatus(playerToMove, board.getSquare(playerToMove.getPlayerBoardPosition()),"");//re-display a player's status
+				break;
 			case 0:
-				runMenu();
+				runMenu();//back to main menu
 				break;
 			default:
 				errorMessage("Invalid option entered: " + gameMenuOption, playerToMove);
@@ -327,14 +332,14 @@ public class MenuController {
 
 	private void validSquare(Player playerToMove) {
 		int positionToMoveTo = validNextInt("Where do you want to move to? Enter square number: ");
-		Square squareToMoveTo = board.getSquare(positionToMoveTo);
-		if (positionToMoveTo < 0 || positionToMoveTo > 64) {
+		if (positionToMoveTo < 1 || positionToMoveTo > 64) {
 			errorMessage("Invalid square number!", playerToMove);
 		}
 		else if(positionToMoveTo < playerToMove.getPlayerBoardPosition()){
 			errorMessage("Can only move forwards from this menu option!", playerToMove);
 		}
 		else{
+			Square squareToMoveTo = board.getSquare(positionToMoveTo);
 			squareUnoccupied(playerToMove, squareToMoveTo, positionToMoveTo, false);
 		}
 	}
@@ -590,8 +595,8 @@ public class MenuController {
 					}
 					i++;
 				}
-				playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots()-(moveCounter * carrotsToGive));
-				System.out.println(playerToMove.getPlayerName() + " gave away" + moveCounter * carrotsToGive + "carrots!");
+				playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() - (moveCounter * carrotsToGive));
+				System.out.println(playerToMove.getPlayerName() + " gave away" + (moveCounter * carrotsToGive) + " carrots!");
 				break;
 			case "If there are more players behind you than in front of you, miss a turn. If not, play again. If equal, of course play again.":
 				if(board.numberOfPlayers() / racePosition >= 2){
@@ -600,6 +605,8 @@ public class MenuController {
 				}
 				else {
 					System.out.println("Playing again");
+					turnComplete = false;
+					makeMove(playerToMove);
 				}
 				break;
 			case "Restore your carrot holding to exactly 65!":
@@ -630,21 +637,25 @@ public class MenuController {
 				System.out.println(playerToMove.showMessage());
 				playerToMove.setMessageCounter(board.numberOfPlayers());
 				break;
-			case "Shuffle The hare cards and receive from each player 1 carrot for doing so":
+			case "Shuffle the hare cards and receive from each player 1 carrot for doing so":
 				System.out.print("Shuffling the deck!\n");
 				Collections.shuffle(board.getHareCards());
 				this.hareCardDeck = 0;
 				int j = 0;
+				int moveCounter2 = 0;
 				while(j < board.numberOfPlayers()) {
 					if(j != turnCounter){
 						Player playerToUpdate = board.getPlayer(j);
+						if(playerToUpdate.getNumberOfCarrots() > 0){
 							playerToUpdate.setNumberOfCarrots(playerToUpdate.getNumberOfCarrots() - 1);
 							System.out.println(playerToUpdate.getPlayerName() + " gave 1 carrot!");
+							moveCounter2++;
 						}
+					}
 					j++;
 				}
 				playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() + board.numberOfPlayers() - 1);
-				System.out.println(playerToMove.getPlayerName() + " gained " + (board.numberOfPlayers() - 1) + " carrots!");
+				System.out.println(playerToMove.getPlayerName() + " gained " + moveCounter2 + " carrots!");
 				break;
 			default:
 				break;
