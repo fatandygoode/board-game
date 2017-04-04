@@ -12,8 +12,8 @@ public class Player {
 	 */
 	public Player(String playerName) {
 		this.setPlayerName(playerName);
-		setNumberOfCarrots(65);
-		this.numberOfLettuces = 3;
+		setNumberOfCarrots(2020);
+		this.numberOfLettuces = 0;
 	}
 
 	/**

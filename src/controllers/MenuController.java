@@ -251,6 +251,8 @@ public class MenuController {
 				break;
 			case 4:
 				System.out.println(board.listSquares());
+				pause();
+				makeMove(playerToMove);//recursive call
 				break;
 			case 5:
 				testMoves(playerToMove);
@@ -288,6 +290,7 @@ public class MenuController {
 						if (playerToMove.getNumberOfCarrots() >= 10){
 						playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() - 10);
 						System.out.println(playerToMove.getPlayerName() + " chewed 10 carrots!");
+						pause();
 						completeMove(playerToMove, currentSquare, currentPosition, 0, false);
 						}
 						else {
@@ -297,6 +300,7 @@ public class MenuController {
 					case "D":
 						playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() + 10);
 						System.out.println(playerToMove.getPlayerName() + " drew 10 carrots!");
+						pause();
 						completeMove(playerToMove, currentSquare, currentPosition, 0, false);
 						break;
 					default:
@@ -398,7 +402,7 @@ public class MenuController {
 				}
 				break;
 			case "---Finish---":
-				if (playerToMove.getNumberOfCarrots() - carrotCost <= 10 * numberOfPlayersFinished && playerToMove.getNumberOfLettuces() == 0) {
+				if (playerToMove.getNumberOfCarrots() - carrotCost <= 10 * (1 + numberOfPlayersFinished) && playerToMove.getNumberOfLettuces() == 0) {
 					playerToMove.setFinished();
 					numberOfPlayersFinished++;
 					completeMove(playerToMove, squareToMoveTo, positionToMoveTo, carrotCost, testing);
@@ -430,7 +434,7 @@ public class MenuController {
 			if (squareToMoveTo.getSquareType().equals("--Tortoise--")) {
 				input = validNextString("Do you want to move to square #" + positionToMoveTo + "? (Y/N)");
 			} else if (squareToMoveTo.getSquareType().equals("---Carrot---") && carrotCost == 0) {
-				input = validNextString("Are you sure? (Y/N)");
+				input = "y";
 			} else {
 				input = validNextString("This will use " + carrotCost + " carrots. Do you wish to continue? (Y/N)");
 			}
@@ -446,7 +450,7 @@ public class MenuController {
 				playerToMove.setSquareCounter(0);
 				turnComplete = true;//invokes nextPlayer method
 				if (playerToMove.isFinished()) {
-					System.out.println(playerToMove.getPlayerName() + "finished the game!");
+					System.out.println(playerToMove.getPlayerName() + " finished the game!");
 				} else {
 					System.out.println(playerToMove.getPlayerName() + " moved " + spacesMoved + " spaces to square #" + playerToMove.getPlayerBoardPosition());
 					displayStatus(playerToMove, squareToMoveTo, "");
@@ -569,11 +573,13 @@ public class MenuController {
 				while(i < board.numberOfPlayers()) {
 					if(i != turnCounter){
 						Player playerToUpdate = board.getPlayer(i);
-						String input = validNextString(playerToUpdate + ", do you want to accept " + carrotsToGive + " carrots? (Y/N)");
-						if (input.equals("Y") || input.equals("y")) {
-							playerToUpdate.setNumberOfCarrots(carrotsToGive + playerToUpdate.getNumberOfCarrots());
-							System.out.println(playerToUpdate.getPlayerName() + " gained " + carrotsToGive + " carrots!");
-							moveCounter++;
+						if(getRacePosition(playerToUpdate) > getRacePosition(playerToMove)){
+							String input = validNextString(playerToUpdate + ", do you want to accept " + carrotsToGive + " carrots? (Y/N)");
+							if (input.equals("Y") || input.equals("y")) {
+								playerToUpdate.setNumberOfCarrots(carrotsToGive + playerToUpdate.getNumberOfCarrots());
+								System.out.println(playerToUpdate.getPlayerName() + " gained " + carrotsToGive + " carrots!\n");
+								moveCounter++;
+							}
 						}
 					}
 					i++;
@@ -612,7 +618,7 @@ public class MenuController {
 			case "Lose half your carrots! If an odd number, keep the odd one.":
 				numberOfCarrots = numberOfCarrots / 2 + numberOfCarrots % 2;
 				playerToMove.setNumberOfCarrots(numberOfCarrots);
-				System.out.print(playerToMove.getPlayerName() + " lost half their carrots!");
+				System.out.print(playerToMove.getPlayerName() + " lost " + (numberOfCarrots / 2) + " carrots!\n");
 				break;
 			case "Show us your carrots! Show your carrots so everyone knows how many you have left":
 				System.out.println(playerToMove.showMessage());
