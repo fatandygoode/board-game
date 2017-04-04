@@ -91,9 +91,11 @@ public class Board
         }
     }
 
-    public ArrayList<Square> getSquares() {
-        return squares;
-    }
+// --Commented out by Inspection START (04/04/2017 15:52):
+//    public ArrayList<Square> getSquares() {
+//        return squares;
+//    }
+// --Commented out by Inspection STOP (04/04/2017 15:52)
 
     public Square getSquare(int index) {
         return squares.get(index);
@@ -115,7 +117,7 @@ public class Board
     }
 
     /**
-     * Method to add an object of type Player to the arraylist players
+     * Method to add an object of type Player to the array list players
      * @param player - the name of the player to be added
      */
     public void addPlayer(Player player) {

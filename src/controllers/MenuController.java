@@ -16,7 +16,7 @@ import java.util.Collections;
  * https://github.com/fatandygoode/board-game
  *
  */
-public class MenuController {
+class MenuController {
 	private final Board board;
 	private int turnCounter, numberOfPlayersFinished, hareCardDeck;
 	private boolean gameInProgress, turnComplete, firstLaunch;
@@ -277,7 +277,7 @@ public class MenuController {
 				pause();
 				makeMove(playerToMove);
 			case 6:
-				displayStatus(playerToMove, board.getSquare(playerToMove.getPlayerBoardPosition()),"");//re-display a player's status
+				displayStatus(playerToMove, board.getSquare(playerToMove.getPlayerBoardPosition()), "");//re-display a player's status
 				break;
 			case 0:
 				runMenu();//back to main menu
