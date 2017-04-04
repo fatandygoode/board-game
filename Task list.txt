@@ -1,7 +1,7 @@
-Can't let carrot count go below zero
-
 Extra features?
 
 In game formatting
 
 Javadoc, comments, indentation
+
+More ascii art
