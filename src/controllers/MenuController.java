@@ -228,7 +228,6 @@ class MenuController {
 		System.out.println("Current Square: " + currentSquare.getSquareType());
 		System.out.println("Race Position: " + getRacePosition(playerToMove));
 		System.out.println(message);
-		pause();
 	}
 
 	private int getRacePosition(Player playerToMove){
@@ -447,7 +446,7 @@ class MenuController {
 			} else if (squareToMoveTo.getSquareType().equals("---Carrot---") && carrotCost == 0) {
 				input = "y";
 			} else {
-				input = validNextString("This will use " + carrotCost + " carrots. Do you wish to continue? (Y/N)");
+				input = validNextString("This will use " + carrotCost + " carrots. Do you wish to continue? (Y/N)\n");
 			}
 			if (input.equals("Y") || input.equals("y")) {
 				Square squareToMoveFrom = board.getSquare(playerToMove.getPlayerBoardPosition());
@@ -480,6 +479,7 @@ class MenuController {
 	private void runSquare(Player playerToMove, Square squareToMoveTo, int spacesMoved, int carrotCost){
 		switch(squareToMoveTo.getSquareType()){
 			case "---Carrot---":
+				System.out.println("");
 				break;
 			case "----Hare----":
 				runHare(playerToMove, carrotCost);
@@ -585,7 +585,7 @@ class MenuController {
 					if(i != turnCounter){
 						Player playerToUpdate = board.getPlayer(i);
 						if(getRacePosition(playerToUpdate) > getRacePosition(playerToMove)){
-							String input = validNextString(playerToUpdate + ", do you want to accept " + carrotsToGive + " carrots? (Y/N)");
+							String input = validNextString(playerToUpdate.getPlayerName() + ", do you want to accept " + carrotsToGive + " carrots? (Y/N)");
 							if (input.equals("Y") || input.equals("y")) {
 								playerToUpdate.setNumberOfCarrots(carrotsToGive + playerToUpdate.getNumberOfCarrots());
 								System.out.println(playerToUpdate.getPlayerName() + " gained " + carrotsToGive + " carrots!\n");
@@ -596,7 +596,7 @@ class MenuController {
 					i++;
 				}
 				playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() - (moveCounter * carrotsToGive));
-				System.out.println(playerToMove.getPlayerName() + " gave away" + (moveCounter * carrotsToGive) + " carrots!");
+				System.out.println(playerToMove.getPlayerName() + " gave away " + (moveCounter * carrotsToGive) + " carrots!");
 				break;
 			case "If there are more players behind you than in front of you, miss a turn. If not, play again. If equal, of course play again.":
 				if(board.numberOfPlayers() / racePosition >= 2){
@@ -604,14 +604,14 @@ class MenuController {
 					System.out.println("Miss the next turn!");
 				}
 				else {
-					System.out.println("Playing again");
+					System.out.println("Playing again...\n");
 					turnComplete = false;
 					makeMove(playerToMove);
 				}
 				break;
 			case "Restore your carrot holding to exactly 65!":
 				playerToMove.setNumberOfCarrots(65);
-				System.out.println(playerToMove.getPlayerName() + " restored their carrot count to 65!");
+				System.out.println(playerToMove.getPlayerName() + " restored their carrot holding to 65!");
 				break;
 			case "Draw 10 Carrots for each lettuce you still hold. If you have none left, miss a turn.":
 				if(playerToMove.getNumberOfLettuces() == 0){
@@ -629,9 +629,9 @@ class MenuController {
 				System.out.println(playerToMove.getPlayerName() + " regained " + carrotCost + " carrots!");
 				break;
 			case "Lose half your carrots! If an odd number, keep the odd one.":
+				System.out.print(playerToMove.getPlayerName() + " lost " + (numberOfCarrots / 2) + " carrots!\n");
 				numberOfCarrots = numberOfCarrots / 2 + numberOfCarrots % 2;
 				playerToMove.setNumberOfCarrots(numberOfCarrots);
-				System.out.print(playerToMove.getPlayerName() + " lost " + (numberOfCarrots / 2) + " carrots!\n");
 				break;
 			case "Show us your carrots! Show your carrots so everyone knows how many you have left":
 				System.out.println(playerToMove.showMessage());
