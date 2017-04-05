@@ -2,19 +2,19 @@ package controllers;
 
 import static utils.ScannerInput.*;
 
+import models.Player;
+import models.Square;
+
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.StringBuilder;
-import models.Player;
-import models.Square;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+
 
 /**
  * Create a game from the terminal and allow users to play in accordance with the rules
@@ -26,6 +26,8 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
  */
 public class MenuController {
 	private Board board;
+	private boolean gameInProgress, turnComplete, firstLaunch;
+	private ArrayList<Integer> availableMoves;
 
 	public static void main(String[] args) {
 		new MenuController();
@@ -36,6 +38,8 @@ public class MenuController {
 	 */
 	private MenuController() {
 		board = new Board();
+		availableMoves = new ArrayList<>();
+		firstLaunch = true;
 		runMenu();
 	}
 
@@ -163,6 +167,8 @@ public class MenuController {
 					{
 						load();
 						System.out.println("Loading game...");
+						gameInProgress = true;
+						firstLaunch = false;
 					}
 					catch (Exception e)
 					{
@@ -203,7 +209,7 @@ public class MenuController {
 		 	}
 
 		//turn starts here
-		Player playerToMove = board.getPlayer(turnCounter);
+		Player playerToMove = board.getPlayer(board.getTurnCounter());
 
 		if (playerToMove.isFinished()) {
 			skipTurn();
@@ -436,13 +442,13 @@ public class MenuController {
 				}
 				break;
 			case "---Finish---":
-				if (playerToMove.getNumberOfCarrots() - carrotCost <= 10 * (1 + numberOfPlayersFinished) && playerToMove.getNumberOfLettuces() == 0) {
+				if (playerToMove.getNumberOfCarrots() - carrotCost <= 10 * (1 + board.getNumberOfPlayersFinished()) && playerToMove.getNumberOfLettuces() == 0) {
 					playerToMove.setFinished();
-					numberOfPlayersFinished++;
+					board.numberOfPlayersFinished++;
 					completeMove(playerToMove, squareToMoveTo, positionToMoveTo, carrotCost, testing);
 				} else {
 					if(!testing){
-						errorMessage("Invalid move! Lose any remaining lettuces and get you number of carrots to below " + 10 * (1 + numberOfPlayersFinished) + " to finish.", playerToMove);
+						errorMessage("Invalid move! Lose any remaining lettuces and get you number of carrots to below " + 10 * (1 + board.getNumberOfPlayersFinished()) + " to finish.", playerToMove);
 					}
 				}
 				break;
@@ -582,12 +588,12 @@ public class MenuController {
 	private void runHare(Player playerToMove, int carrotCost) {
 		int numberOfCarrots = playerToMove.getNumberOfCarrots();
 		int racePosition = getRacePosition(playerToMove);
-		String nextHareCard = board.getHareCard(hareCardDeck);
+		String nextHareCard = board.getHareCard(board.getHareCardDeck());
 		System.out.println("Draw a hare card!");
 		pause();
 		System.out.println(nextHareCard);
 		pause();
-		this.hareCardDeck++;
+		this.board.hareCardDeck++;
 		
 		switch(nextHareCard) {
 			case "Give 10 carrots to each player lying behind you in the race (if any).\nIf you haven't enough carrots, give them five each; if still not possible, one each.\nA player who doesn't want extra carrots may discard them":
@@ -607,7 +613,7 @@ public class MenuController {
 				int i = 0;
 				int moveCounter = 0;
 				while(i < board.numberOfPlayers()) {
-					if(i != turnCounter){
+					if(i != board.getTurnCounter()){
 						Player playerToUpdate = board.getPlayer(i);
 						if(getRacePosition(playerToUpdate) > getRacePosition(playerToMove)){
 							String input = validNextString(playerToUpdate + ", do you want to accept " + carrotsToGive + " carrots? (Y/N)");
@@ -663,10 +669,10 @@ public class MenuController {
 			case "Shuffle The hare cards and receive from each player 1 carrot for doing so":
 				System.out.print("Shuffling the deck!\n");
 				Collections.shuffle(board.getHareCards());
-				this.hareCardDeck = 0;
+				this.board.hareCardDeck = 0;
 				int j = 0;
 				while(j < board.numberOfPlayers()) {
-					if(j != turnCounter){
+					if(j != board.getTurnCounter()){
 						Player playerToUpdate = board.getPlayer(j);
 							playerToUpdate.setNumberOfCarrots(playerToUpdate.getNumberOfCarrots() - 1);
 							System.out.println(playerToUpdate.getPlayerName() + " gave 1 carrot!");
@@ -705,8 +711,7 @@ public class MenuController {
 	 */
 	private void nextPlayer() {
 		if (turnComplete) {
-			turnCounter++; //increment turn counter by 1
-			turnCounter = turnCounter % board.numberOfPlayers(); //reset to zero after all players have played
+			board.increaseCounter();
 			turnComplete = false;//back to false for the next player
 		}
 		pause();
@@ -719,27 +724,23 @@ public class MenuController {
 		nextPlayer();
 	}
 	
-    public void save() throws Exception
-    {
-    	XStream xstream = new XStream(new DomDriver());
-    	ObjectOutputStream out = xstream.createObjectOutputStream(new FileWriter("boardgame.xml"));
-    	out.writeObject(board);
-    	//out.writeObject(players);
-    	//out.writeObject(hareCards);
-    	out.close();
-    }
-    
-    @SuppressWarnings("unchecked")
-    public void load() throws Exception
-    {
-    	XStream xstream = new XStream(new DomDriver());
-    	ObjectInputStream is = xstream.createObjectInputStream(new FileReader("boardgame.xml"));
-    	board = (Board) is.readObject();
-    	
-    	//players = (ArrayList<Player>) is.readObject();
-        //hareCards = (ArrayList<String>) is.readObject();
-    	is.close();
-    }
+	public void save() throws Exception
+	{
+		XStream xstream = new XStream(new DomDriver());
+		ObjectOutputStream out = xstream.createObjectOutputStream(new FileWriter("boardgame.xml"));
+		out.writeObject(board);
+		out.close();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void load() throws Exception
+	{
+		XStream xstream = new XStream(new DomDriver());
+		ObjectInputStream is = xstream.createObjectInputStream(new FileReader("boardgame.xml"));
+		board = (Board) is.readObject();
+		is.close();
+	}
+
     
 	
 	
