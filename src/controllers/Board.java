@@ -9,10 +9,11 @@ import java.util.Collections;
 
 public class Board
 {
-	public ArrayList<Square> squares;
-	public ArrayList<Player> players;
-	public ArrayList<String> hareCards;
-	public Integer turnCounter, numberOfPlayersFinished, hareCardDeck;
+	public static ArrayList<Square> squares;
+	public static ArrayList<Player> players;
+	public static ArrayList<String> hareCards;
+	public static Integer turnCounter, numberOfPlayersFinished, hareCardDeck;
+	
 	/**
 	 * Constructor for objects of class Board
 	 */
@@ -104,7 +105,7 @@ public class Board
 		return squares.get(index);
 	}
 
-	public String listSquares() {
+	public static String listSquares() {
 		String list = "";
 		for (int i = 1; i < squares.size()-1; i = i + 3) {
 			list = list + i + squares.get(i).toString() + "\t\t\t" + (i+1) + squares.get(i+1) + "\t\t\t" + (i+2) + squares.get(i+2) + "\n";
@@ -141,7 +142,7 @@ public class Board
 	 * Method to get the number of players playing the game
 	 * @return the size of the array list players
 	 */
-	public int numberOfPlayers() {
+	public static int numberOfPlayers() {
 		return players.size();
 	}
 
@@ -149,7 +150,7 @@ public class Board
 	 * Method to return an indexed list of the players added to the game
 	 * @return an indexed list of the players added to the game
 	 */
-	public String listPlayers() {
+	public static String listPlayers() {
 		String list = "";
 		for (int index = 0; index < players.size(); index++) {
 			list = list + index + " - " + players.get(index).getPlayerName() + "\n";
@@ -180,7 +181,7 @@ public class Board
 		return turnCounter;
 	}
 	
-	public void increaseCounter()
+	public static void increaseCounter()
 	{
 		turnCounter++; //increment turn counter by 1
 		turnCounter = turnCounter % numberOfPlayers(); //reset to zero after all players have played
@@ -191,9 +192,19 @@ public class Board
 		return numberOfPlayersFinished;
 	}
 	
+	public static void newPlayerFinished()
+	{
+		numberOfPlayersFinished ++;
+	}
+	
 	public int getHareCardDeck()
 	{
 		return hareCardDeck;
+	}
+	
+	public static void drawNextCard()
+	{
+		hareCardDeck ++;
 	}
 	
 }
