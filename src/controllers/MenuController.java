@@ -1,9 +1,11 @@
 package controllers;
 
 import static utils.ScannerInput.*;
+import static controllers.Board.*;
 
 import models.Player;
 import models.Square;
+
 
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -85,7 +87,7 @@ public class MenuController {
 					if (gameInProgress) {
 						System.out.println("Error, cannot perform this function after the game has started");
 					} else {
-						if (board.numberOfPlayers() < 6) { //can't add more than 6 players
+						if (numberOfPlayers() < 6) { //can't add more than 6 players
 							String playerName = validNextString("Enter the player name...");
 							board.addPlayer(new Player(playerName));
 							System.out.println(playerName + " added to the game");
@@ -96,19 +98,19 @@ public class MenuController {
 					}
 					break;
 				case 2: //list players
-					if (board.numberOfPlayers() > 0) {
-						System.out.println(board.listPlayers());
-						System.out.println("Total: " + board.numberOfPlayers());
+					if (numberOfPlayers() > 0) {
+						System.out.println(listPlayers());
+						System.out.println("Total: " + numberOfPlayers());
 					} else {
 						System.out.println("No players added");
 					}
 					break;
 				case 3: //edit player name
-					if (board.numberOfPlayers() > 0) {
-						System.out.println(board.listPlayers());
+					if (numberOfPlayers() > 0) {
+						System.out.println(listPlayers());
 						int index = validNextInt("Please enter the index for the player you wish to edit: ");
 
-						if (index >= 0 && index < board.numberOfPlayers()) {
+						if (index >= 0 && index < numberOfPlayers()) {
 							Player playerToUpdate = board.getPlayer(index);
 							String newName = validNextString("Enter the new name for " + playerToUpdate.getPlayerName() + ": ");
 							playerToUpdate.setPlayerName(newName);
@@ -124,11 +126,11 @@ public class MenuController {
 					if (gameInProgress) {
 						System.err.println("Error, cannot perform this function after the game has started");
 					} else {
-						if (board.numberOfPlayers() > 0) {
-							System.out.println(board.listPlayers());
+						if (numberOfPlayers() > 0) {
+							System.out.println(listPlayers());
 
 							int index = validNextInt("Please enter the index of the player you wish to delete: ");
-							if (index >= 0 && index < board.numberOfPlayers()) {
+							if (index >= 0 && index < numberOfPlayers()) {
 								System.out.println(board.getPlayer(index).getPlayerName() + " removed from the game");
 								board.removePlayer(index);
 							} else {
@@ -140,7 +142,7 @@ public class MenuController {
 					}
 					break;
 				case 5: //begin(resume) the game
-					if (board.numberOfPlayers() > 1) {//need at least 2 players
+					if (numberOfPlayers() > 1) {//need at least 2 players
 
 						gameInProgress = true;//change to main menu options
 
@@ -209,7 +211,7 @@ public class MenuController {
 		 	}
 
 		//turn starts here
-		Player playerToMove = board.getPlayer(board.getTurnCounter());
+		Player playerToMove = board.getPlayer(turnCounter);
 
 		if (playerToMove.isFinished()) {
 			skipTurn();
@@ -264,7 +266,7 @@ public class MenuController {
 	}
 
 	private int getRacePosition(Player playerToMove){
-		int racePosition = board.numberOfPlayers();
+		int racePosition = numberOfPlayers();
 		for(Player player : board.getPlayers()){
 			if(playerToMove.getPlayerBoardPosition() > player.getPlayerBoardPosition()){
 				racePosition--;
@@ -290,7 +292,7 @@ public class MenuController {
 				moveBack(playerToMove, false);
 				break;
 			case 4:
-				System.out.println(board.listSquares());
+				System.out.println(listSquares());
 				pause();
 				makeMove(playerToMove);//recursive call
 				break;
@@ -442,9 +444,9 @@ public class MenuController {
 				}
 				break;
 			case "---Finish---":
-				if (playerToMove.getNumberOfCarrots() - carrotCost <= 10 * (1 + board.getNumberOfPlayersFinished()) && playerToMove.getNumberOfLettuces() == 0) {
+				if (playerToMove.getNumberOfCarrots() - carrotCost <= 10 * (1 + numberOfPlayersFinished) && playerToMove.getNumberOfLettuces() == 0) {
 					playerToMove.setFinished();
-					board.numberOfPlayersFinished++;
+					newPlayerFinished();
 					completeMove(playerToMove, squareToMoveTo, positionToMoveTo, carrotCost, testing);
 				} else {
 					if(!testing){
@@ -588,16 +590,16 @@ public class MenuController {
 	private void runHare(Player playerToMove, int carrotCost) {
 		int numberOfCarrots = playerToMove.getNumberOfCarrots();
 		int racePosition = getRacePosition(playerToMove);
-		String nextHareCard = board.getHareCard(board.getHareCardDeck());
+		String nextHareCard = board.getHareCard(hareCardDeck);
 		System.out.println("Draw a hare card!");
 		pause();
 		System.out.println(nextHareCard);
 		pause();
-		this.board.hareCardDeck++;
+		drawNextCard();
 		
 		switch(nextHareCard) {
 			case "Give 10 carrots to each player lying behind you in the race (if any).\nIf you haven't enough carrots, give them five each; if still not possible, one each.\nA player who doesn't want extra carrots may discard them":
-				int carrotsToGive = numberOfCarrots / (board.numberOfPlayers() - 1);
+				int carrotsToGive = numberOfCarrots / (numberOfPlayers() - 1);
 				if(carrotsToGive >= 10){
 					carrotsToGive = 10;
 				}
@@ -612,8 +614,8 @@ public class MenuController {
 				}
 				int i = 0;
 				int moveCounter = 0;
-				while(i < board.numberOfPlayers()) {
-					if(i != board.getTurnCounter()){
+				while(i < numberOfPlayers()) {
+					if(i != turnCounter){
 						Player playerToUpdate = board.getPlayer(i);
 						if(getRacePosition(playerToUpdate) > getRacePosition(playerToMove)){
 							String input = validNextString(playerToUpdate + ", do you want to accept " + carrotsToGive + " carrots? (Y/N)");
@@ -630,7 +632,7 @@ public class MenuController {
 				System.out.println(playerToMove.getPlayerName() + " gave away" + moveCounter * carrotsToGive + "carrots!");
 				break;
 			case "If there are more players behind you than in front of you, miss a turn. If not, play again. If equal, of course play again.":
-				if(board.numberOfPlayers() / racePosition >= 2){
+				if(numberOfPlayers() / racePosition >= 2){
 					playerToMove.setSkipNextTurn(true);
 					System.out.println("Miss the next turn!");
 				}
@@ -664,23 +666,23 @@ public class MenuController {
 				break;
 			case "Show us your carrots! Show your carrots so everyone knows how many you have left":
 				System.out.println(playerToMove.showMessage());
-				playerToMove.setMessageCounter(board.numberOfPlayers());
+				playerToMove.setMessageCounter(numberOfPlayers());
 				break;
 			case "Shuffle The hare cards and receive from each player 1 carrot for doing so":
 				System.out.print("Shuffling the deck!\n");
 				Collections.shuffle(board.getHareCards());
-				this.board.hareCardDeck = 0;
+				hareCardDeck = 0;
 				int j = 0;
-				while(j < board.numberOfPlayers()) {
-					if(j != board.getTurnCounter()){
+				while(j < numberOfPlayers()) {
+					if(j != turnCounter){
 						Player playerToUpdate = board.getPlayer(j);
 							playerToUpdate.setNumberOfCarrots(playerToUpdate.getNumberOfCarrots() - 1);
 							System.out.println(playerToUpdate.getPlayerName() + " gave 1 carrot!");
 						}
 					j++;
 				}
-				playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() + board.numberOfPlayers() - 1);
-				System.out.println(playerToMove.getPlayerName() + " gained " + (board.numberOfPlayers() - 1) + " carrots!");
+				playerToMove.setNumberOfCarrots(playerToMove.getNumberOfCarrots() + numberOfPlayers() - 1);
+				System.out.println(playerToMove.getPlayerName() + " gained " + (numberOfPlayers() - 1) + " carrots!");
 				break;
 			default:
 				break;
@@ -711,7 +713,7 @@ public class MenuController {
 	 */
 	private void nextPlayer() {
 		if (turnComplete) {
-			board.increaseCounter();
+			increaseCounter();
 			turnComplete = false;//back to false for the next player
 		}
 		pause();
@@ -732,7 +734,6 @@ public class MenuController {
 		out.close();
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void load() throws Exception
 	{
 		XStream xstream = new XStream(new DomDriver());
