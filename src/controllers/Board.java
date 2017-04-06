@@ -2,15 +2,17 @@ package controllers;
 
 import models.Player;
 import models.Square;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class Board
-{
+@SuppressWarnings({"WeakerAccess"})
+public class Board {
     private final ArrayList<Square> squares;
-    private ArrayList<Player> players;
     private final ArrayList<String> hareCards;
+    @SuppressWarnings("CanBeFinal")
+    private ArrayList<Player> players;
+    private Integer turnCounter, numberOfPlayersFinished, hareCardDeck;
+
     /**
      * Constructor for objects of class Board
      */
@@ -21,8 +23,15 @@ public class Board
         addPlayers();//delete when finished
         hareCards = new ArrayList<>();
         createDeck();
+        turnCounter = 0;
+        numberOfPlayersFinished = 0;
+        hareCardDeck = 0;
     }
 
+    /**
+     *
+     */
+    @SuppressWarnings("RedundantStringConstructorCall")
     private void createDeck() {
         int i = 0;
         while(i < 2){
@@ -39,14 +48,26 @@ public class Board
         Collections.shuffle(hareCards);
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<String> getHareCards() {
         return hareCards;
     }
 
+    /**
+     *
+     * @param index
+     * @return
+     */
     public String getHareCard(int index) {
         return hareCards.get(index);
     }
 
+    /**
+     *
+     */
     private void createBoard() {
     	int i = 0;
     	while(i < 65) {
@@ -91,24 +112,31 @@ public class Board
         }
     }
 
-// --Commented out by Inspection START (04/04/2017 15:52):
-//    public ArrayList<Square> getSquares() {
-//        return squares;
-//    }
-// --Commented out by Inspection STOP (04/04/2017 15:52)
-
+    /**
+     *
+     * @param index
+     * @return
+     */
     public Square getSquare(int index) {
         return squares.get(index);
     }
 
+    /**
+     *
+     * @return
+     */
     public String listSquares() {
         String list = "";
         for (int i = 1; i < squares.size()-1; i = i + 3) {
-                list = list + i + squares.get(i).toString() + "\t\t\t" + (i+1) + squares.get(i+1) + "\t\t\t" + (i+2) + squares.get(i+2) + "\n";
+            //noinspection StringConcatenationInLoop
+            list = list + i + squares.get(i).toString() + "\t\t\t" + (i+1) + squares.get(i+1) + "\t\t\t" + (i+2) + squares.get(i+2) + "\n";
         }
         return 0 + squares.get(0).toString() + "\n" + list + 64 + squares.get(64).toString();
     }
 
+    /**
+     *
+     */
     private void addPlayers(){ //to help run the console quicker. delete when finished
         players.add(new Player("John"));
         players.add(new Player("Brian"));
@@ -117,16 +145,16 @@ public class Board
     }
 
     /**
-     * Method to add an object of type Player to the array list players
-     * @param player - the name of the player to be added
+     *
+     * @param player
      */
     public void addPlayer(Player player) {
         players.add(player);
     }
 
     /**
-     * Method to remove a player from the game
-     * @param index - the index of the player to be removed
+     *
+     * @param index
      */
     public void removePlayer(int index) {
         if ( (index >= 0) && (index < players.size() ) ) {
@@ -135,41 +163,103 @@ public class Board
     }
 
     /**
-     * Method to get the number of players playing the game
-     * @return the size of the array list players
+     *
+     * @return
      */
     public int numberOfPlayers() {
         return players.size();
     }
 
     /**
-     * Method to return an indexed list of the players added to the game
-     * @return an indexed list of the players added to the game
+     *
+     * @return
      */
     public String listPlayers() {
-        String list = "";
+        StringBuilder list = new StringBuilder();
         for (int index = 0; index < players.size(); index++) {
-            list = list + index + " - " + players.get(index).getPlayerName() + "\n";
+            list.append(index).append(" - ").append(players.get(index).getPlayerName()).append("\n");
         }
-        if (list.equals("")) {
+        if (list.toString().equals("")) {
             return "No players";
         }
         else {
-            return list;
+            return list.toString();
         }
     }
 
     /**
-     * Method to get a player from the array list
-     * @param index - the index of the player to be returned
-     * @return the object of type Player corresponding to the given index
+     *
+     * @param index
+     * @return
      */
     public Player getPlayer(int index) {
         return players.get(index);
     }
 
+    /**
+     *
+     * @return
+     */
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    /**
+     *
+     */
+    public void increaseCounter(){
+        turnCounter++; //increment turn counter by 1
+        turnCounter = turnCounter % numberOfPlayers(); //reset to zero after all players have played
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int getTurnCounter(){
+        return turnCounter;
+    }
+
+    /**
+     *
+     */
+    public void drawNextCard() {
+        hareCardDeck++;
+    }
+
+    /**
+     *
+     */
+    public void shuffleDeck(){
+        hareCardDeck = 0;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public int topOfDeck(){
+        return hareCardDeck;
+    }
+
+    /**
+     *
+     */
+    public void newPlayerFinished() {
+        numberOfPlayersFinished ++;
+    }
+
+    /**
+     *
+     * @return
+     */
+
+    /**
+     *
+     * @return
+     */
+    public int getNumberOfPlayersFinished(){
+        return numberOfPlayersFinished;
     }
 }
 

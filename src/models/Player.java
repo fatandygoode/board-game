@@ -1,5 +1,8 @@
 package models;
 
+/**
+ *
+ */
 public class Player {
 		private String playerName;
 		private int numberOfCarrots, numberOfLettuces, playerBoardPosition, squareCounter, messageCounter;
@@ -123,23 +126,42 @@ public class Player {
 		this.squareCounter = squareCounter;
 	}
 
-
+	/**
+	 *
+	 * @return
+	 */
 	public boolean isSkipNextTurn() {
 		return skipNextTurn;
 	}
 
+	/**
+	 *
+	 * @param skipNextTurn
+	 */
 	public void setSkipNextTurn(boolean skipNextTurn) {
 		this.skipNextTurn = skipNextTurn;
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public String showMessage() {
 		return playerName + " has " + numberOfCarrots + " carrots!";
 	}
 
+	/**
+	 *
+	 * @return
+	 */
 	public int getMessageCounter() {
 		return messageCounter;
 	}
 
+	/**
+	 *
+	 * @param messageCounter
+	 */
 	public void setMessageCounter(int messageCounter) {
 		this.messageCounter = messageCounter;
 	}
