@@ -14,11 +14,9 @@ import java.util.Collections;
 
 /**
  * Create a game from the terminal and allow users to play in accordance with the rules
- *
  * @author John Madden, Brian O'Sullivan, Patrick Kiely, Sean Mundy.
  * @version 2017-03-21
  * https://github.com/fatandygoode/board-game
- *
  */
 class MenuController {
 	private Board board;
@@ -27,8 +25,8 @@ class MenuController {
 	private boolean gameInProgress, turnComplete, firstLaunch;
 
 	/**
-	 *
-	 * @param args
+	 * Main method to run the program
+	 * @param args As required by main
 	 */
 	public static void main(String[] args) {
 		new MenuController();
@@ -66,8 +64,9 @@ class MenuController {
 		System.out.println("  6) Save Game (XML)");
 		System.out.println("  7) Load Game (XML)");
 		System.out.println("---------");
+		System.out.println("  8) Display game rules");
+		System.out.println("---------");
 		System.out.println("  0) Exit");
-
 		return validNextInt("==>> ");
 	}
 
@@ -77,7 +76,6 @@ class MenuController {
 	private void runMenu() {
 		int mainMenuOption = mainMenu();//puts user's choice from the main menu through the switch loop
 		boolean skipMainMenu = false;//keep displaying main menu until user starts the game
-
 		while (mainMenuOption != 0) {// 0 to exit and terminate the program
 			switch (mainMenuOption) {
 				case 1: //add  a player to the game
@@ -106,7 +104,6 @@ class MenuController {
 					if (board.numberOfPlayers() > 0) {
 						System.out.println(board.listPlayers());
 						int index = validNextInt("Please enter the index for the player you wish to edit: ");
-
 						if (index >= 0 && index < board.numberOfPlayers()) {
 							Player playerToUpdate = board.getPlayer(index);
 							String newName = validNextString("Enter the new name for " + playerToUpdate.getPlayerName() + ": ");
@@ -117,7 +114,6 @@ class MenuController {
 					} else {
 						System.out.println("No players added");
 					}
-
 					break;
 				case 4: //remove a player from the game
 					if (gameInProgress) {
@@ -125,7 +121,6 @@ class MenuController {
 					} else {
 						if (board.numberOfPlayers() > 0) {
 							System.out.println(board.listPlayers());
-
 							int index = validNextInt("Please enter the index of the player you wish to delete: ");
 							if (index >= 0 && index < board.numberOfPlayers()) {
 								System.out.println(board.getPlayer(index).getPlayerName() + " removed from the game");
@@ -140,23 +135,25 @@ class MenuController {
 					break;
 				case 5: //begin(resume) the game
 					if (board.numberOfPlayers() > 1) {//need at least 2 players
-
 						gameInProgress = true;//change to main menu options
-
 						skipMainMenu = true;//stop displaying main menu when running the game
-
 						runGame();//starts the game
 					} else {
 						System.out.println("You need to add between 2 and 6 players to begin the game");
 					}
 					break;
 				case 6: //save the current game
-					try {
-						save();
-						System.out.println("The game has been saved!");
+					if(gameInProgress){
+						try {
+							save();
+							System.out.println("The game has been saved!");
+						}
+						catch (Exception e) {
+							System.err.println("Error writing to file: " + e);
+						}
 					}
-					catch (Exception e) {
-						System.err.println("Error writing to file: " + e);
+					else {
+					System.out.println("Cannot save before starting the game");
 					}
 					break;
 				case 7: //load a previously saved game
@@ -170,12 +167,14 @@ class MenuController {
 						System.err.println("Error reading from file: " + e);
 					}
 					break;
+				case 8:
+					gameRules();
+					break;
 				default:
 					System.out.println("Invalid option entered: " + mainMenuOption);
 					break;
 			}
 			pause();
-
 			if (!skipMainMenu) { //display the main menu again if not starting game
 				mainMenuOption = mainMenu();
 			}
@@ -187,8 +186,8 @@ class MenuController {
 	/**
 	 * Method to run the game
 	 */
-	private void runGame() {//ref: http://www.ascii-code.com/ascii-art
-		 	if(firstLaunch) {//welcome message only on first launch
+	private void runGame() {
+		 	if(firstLaunch) {//welcome message only on first launch (ref: http://www.ascii-code.com/ascii-art)
 			   System.out.println(" _____________________________________________________________________\n");
 			   System.out.println("          ,\\                                                   ");
 			   System.out.println("          \\\\\\,_        <<<<<<<<<<>>>>>>>>>>>                         ");
@@ -203,10 +202,7 @@ class MenuController {
 			   Collections.shuffle(board.getPlayers());//randomise player order at the start
 			   pause();
 		 	}
-
-		//turn starts here
-		Player playerToMove = board.getPlayer(board.getTurnCounter());
-
+		Player playerToMove = board.getPlayer(board.getTurnCounter());//turn starts here
 		if (playerToMove.isFinished()) {//skips a players turn if they are finished
 			skipTurn();
 		}
@@ -250,7 +246,6 @@ class MenuController {
 		System.out.println("  6) Display player status");
 		System.out.println("===============");
 		System.out.println("  0) Return to main menu");
-
 		return validNextInt("===>>");
 	}
 
@@ -316,7 +311,7 @@ class MenuController {
 				else {
 					reset(playerToMove);
 				}
-				availableMoves.clear();//clear the arraylist for the next player
+				availableMoves.clear();//clear the array list for the next player
 				pause();
 				makeMove(playerToMove);//back to this method when complete
 			case 6:
@@ -330,19 +325,19 @@ class MenuController {
 				errorMessage("Invalid option entered: " + gameMenuOption, playerToMove);
 				break;
 		}
-		nextPlayer();//method to cyle between players
+		nextPlayer();//method to cycle between players
 	}
 
 	/**
 	 * Method to execute menu option 2. If a player is on a carrot square they can pay or draw 10 carrots in lieu of moving to a new square.
 	 * @param playerToMove The player whose turn it is
-	 * @param testing Tells the method that the player is only checking if the move is available, and not to exceute the move
+	 * @param testing Tells the method that the player is only checking if the move is available, and not to execute the move
 	 */
 	private void chewCarrots(Player playerToMove, boolean testing) {
 		int currentPosition = playerToMove.getPlayerBoardPosition();
 		Square currentSquare = board.getSquare(currentPosition);
-		if (currentSquare.getSquareType().equals("---Carrot---")) {
-			if(!testing){
+		if (currentSquare.getSquareType().equals("---Carrot---")){//only allow move on carrot square
+			if(!testing){//only present options if not testing
 				String input = (validNextString("Chew or draw 10 carrots? (C/D)?"));
 				input = input.toUpperCase();
 				switch (input) {
@@ -400,21 +395,22 @@ class MenuController {
 	/**
 	 * Method to check which moves are available to the player to move (menu option 5)
 	 * Runs menu options 1, 2, and 3 with the testing variable set to true
+	 * If a move is valid it passes through the helper methods, and gets added to the list in the completeMove() method
 	 * @param playerToMove The player whose turn it is
 	 */
 	private void testMoves(Player playerToMove){
 		int currentPosition = playerToMove.getPlayerBoardPosition();
-		for(int positionToMoveTo = currentPosition + 1; positionToMoveTo < 65; positionToMoveTo++){
+		for(int positionToMoveTo = currentPosition + 1; positionToMoveTo < 65; positionToMoveTo++){//generate all squares ahead of the player and test if they can be moved to
 			squareUnoccupied(playerToMove, board.getSquare(positionToMoveTo), positionToMoveTo, true);
 		}
-		moveBack(playerToMove, true);
-		chewCarrots(playerToMove, true);
+		moveBack(playerToMove, true);//test the tortoise square move
+		chewCarrots(playerToMove, true);//test the carrot square move
 	}
 
 	/**
 	 * Method to move back to the nearest tortoise square
 	 * @param playerToMove The player whose turn it is
-	 * @param testing Tells the method that the player is only checking if the move is available, and not to exceute the move
+	 * @param testing Tells the method that the player is only checking if the move is available, and not to execute the move
 	 */
 	private void moveBack(Player playerToMove, boolean testing){
 		int i = 11;//11 is the first tortoise square on the board
@@ -459,7 +455,7 @@ class MenuController {
 	 * @param playerToMove The player whose turn it is
 	 * @param squareToMoveTo The square the player wants to move to as per their input
 	 * @param positionToMoveTo The position the player wants to move to as per their input
-	 * @param testing Tells the method that the player is only checking if the move is available, and not to exceute the move
+	 * @param testing Tells the method that the player is only checking if the move is available, and not to execute the move
 	 */
 	private void enoughCarrots(Player playerToMove, Square squareToMoveTo, int positionToMoveTo, boolean testing) {
 		int i = positionToMoveTo - playerToMove.getPlayerBoardPosition();
@@ -484,7 +480,7 @@ class MenuController {
 	 * @param squareToMoveTo The square the player wants to move to as per their input
 	 * @param positionToMoveTo The position the player wants to move to as per their input
 	 * @param carrotCost The number of carrots the move as input by the player will require
-	 * @param testing Tells the method that the player is only checking if the move is available, and not to exceute the move
+	 * @param testing Tells the method that the player is only checking if the move is available, and not to execute the move
 	 */
 	private void validMove(Player playerToMove, Square squareToMoveTo, int positionToMoveTo, int carrotCost, boolean testing) {
 		switch (squareToMoveTo.getSquareType()) {
@@ -499,8 +495,8 @@ class MenuController {
 				break;
 			case "---Finish---"://only if # of lettuces = 0 & number of carrots is sufficiently low as per game rules
 				if (playerToMove.getNumberOfCarrots() - carrotCost <= 10 * (1 + board.getNumberOfPlayersFinished()) && playerToMove.getNumberOfLettuces() == 0) {
-					playerToMove.setFinished();
-					board.newPlayerFinished();
+					playerToMove.setFinished();//player set to finished so that their turn will be skipped
+					board.newPlayerFinished();//increment # of players finished, changes finish requirement for the next player
 					completeMove(playerToMove, squareToMoveTo, positionToMoveTo, carrotCost, testing);
 				} else {
 					if(!testing){
@@ -532,7 +528,7 @@ class MenuController {
 	 * @param squareToMoveTo The square the player wants to move to as per their input
 	 * @param positionToMoveTo The position the player wants to move to as per their input
 	 * @param carrotCost The number of carrots the move as input by the player will require
-	 * @param testing Tells the method that the player is only checking if the move is available, and not to exceute the move
+	 * @param testing Tells the method that the player is only checking if the move is available, and not to execute the move
 	 */
 	private void completeMove(Player playerToMove, Square squareToMoveTo, int positionToMoveTo, int carrotCost, boolean testing) {
 		if (!testing) {//execute if not testing
@@ -573,7 +569,7 @@ class MenuController {
 	}
 
 	/**
-	 * Method to invoke post-most instructions as per game rules
+	 * Method to invoke post-move instructions as per game rules
 	 * @param playerToMove The player whose turn it is
 	 * @param squareToMoveTo The square the player wants to move to as per their input
 	 * @param spacesMoved The number of spaces between the player's old square and their new one
@@ -582,7 +578,7 @@ class MenuController {
 	private void runSquare(Player playerToMove, Square squareToMoveTo, int spacesMoved, int carrotCost){
 		switch(squareToMoveTo.getSquareType()){
 			case "---Carrot---":
-				System.out.println("Insert game message for carrot square");
+				System.out.println("All carrot, no stick");
 				break;
 			case "----Hare----":
 				runHare(playerToMove, carrotCost);
@@ -650,7 +646,7 @@ class MenuController {
 				System.out.println("Hares eat their shit, wait another turn");
 				skipTurn();
 				break;
-			case 3: //finishes the move as per gmae rules
+			case 3: //finishes the move as per game rules
 				int numberOfCarrots = playerToMove.getNumberOfCarrots() + 10 * getRacePosition(playerToMove);
 				playerToMove.setNumberOfCarrots(numberOfCarrots);
 				System.out.println(playerToMove.getPlayerName() + " gained " + 10 * getRacePosition(playerToMove) + " carrots! " + playerToMove.getNumberOfLettuces() + " lettuces left !");
@@ -834,7 +830,7 @@ class MenuController {
 
 	/**
 	 * Method to save the current game
-	 * @throws Exception
+	 * @throws Exception To throw any exception
 	 */
 	private void save() throws Exception
 	{
@@ -846,7 +842,7 @@ class MenuController {
 
 	/**
 	 * Method to load a previously saved game
-	 * @throws Exception
+	 * @throws Exception To throw any exception
 	 */
 	private void load() throws Exception
 	{
@@ -854,5 +850,63 @@ class MenuController {
 		ObjectInputStream is = xstream.createObjectInputStream(new FileReader("boardgame.xml"));
 		board = (Board) is.readObject();
 		is.close();
+	}
+
+	private void gameRules(){
+		System.out.println("------------------");
+		System.out.println(" A game of skill based on a classic theme");
+		System.out.println("------------------");
+		System.out.println(" Number of players : 2 to 6\n");
+		System.out.println(" Playing time  : 45-60 minutes");
+		System.out.println(" Types of card  : 6 race cards, 15 hare cares, 18 lettuce cards, and carrot cards in denominations of 1, 5, 10, 15, 30, 60. ");
+
+		System.out.println("------------------");
+		System.out.println(" Introduction");
+		System.out.println("------------------");
+		System.out.println(" Hare & Tortoise is a race game with a difference.\n");
+		System.out.println(" You don't move round the track by rolling dice and obeying instructions," );
+		System.out.println(" but by spending carrots and spending them wisely . In this game you can always move as far as you like");
+		System.out.println(" - so long as you have enough carrots to pay for it.\n");
+		System.out.println(" (You start with 65 and earn more by landing on certain square.)\n");
+		System.out.println("------------------");
+		System.out.println(" The catch is the further you move the more you pay!");
+		System.out.println("------------------");
+		System.out.println(" So players who hare ahead too fast, run out of carrots first and the lose valuable time to get them back \n");
+		System.out.println(" Meanwhile, those who plod along like tortoises have so many carrots left that they have a good chance");
+		System.out.println(" of overtaking the hares.");
+		System.out.println("------------------");
+		System.out.println(" The skill of the game lies in choosing the right square to land on ");
+		System.out.println(" and in playing hare or tortoise depending on your position\n");
+		System.out.println(" The fun of it lies in changing other runner's positions by overtaking them.");
+		System.out.println("  - or even moving backwards!\n");
+		System.out.println(" Sometimes it's right to leap ahead. Sometime it's best to lag behind\n");
+		System.out.println(" But all the time it's down to YOU to make the right decision\n");
+		System.out.println("------------------");
+		System.out.println(" Off you go. May the best animal win! ");
+		System.out.println("------------------");
+		System.out.println(" Getting Ready");
+		System.out.println("------------------");
+		System.out.println(" Choose a runner each and place it on the board at START.");
+		System.out.println(" Deal carrot cards to each player as follows : one 30, one 15, one 10, two 5's - total 65 carrots.\n");
+		System.out.println(" During play, hold you carrot cards so that no-one knows exactly how many you have left.");
+		System.out.println(" Each player also takes three lettuce cards and a race card. The race card contains useful information");
+		System.out.println(" and is for reference only.");
+		System.out.println(" Separate the undealt carrot cards and place them on the board in the numbered spaces - the 'carrot patch'.");
+		System.out.println(" Throughout play, all carrot payments are made into this patch.");
+		System.out.println("------------------");
+		System.out.println(" Object of the game");
+		System.out.println("------------------");
+		System.out.println(" To get your runner home first. But you must;");
+		System.out.println(" Get rid of all your lettuces on the way round ( This is done by landing on lettuce squares");
+		System.out.println(" Not have too many carrot left over when you reach home.");
+		System.out.println(" The first home is allowed up to 10 unused carrots, second 20, the third 30, and so on) ");
+		System.out.println("------------------");
+		System.out.println(" How to move");
+		System.out.println("------------------");
+		System.out.println(" You may move your runner forwards to any unoccupied square except the tortoise square.\n");
+		System.out.println(" It can be any distance as long as you have enough carrots to pay for the move");
+		System.out.println(" The cost is shown on the race.");
+		System.out.println(" Later in the game you may move backwards instead of forwards, only to a tortoise square.\n");
+		System.out.println(" Moving backwards costs nothing - instead, it is a way of earning carrots.");
 	}
 }

@@ -82,7 +82,6 @@ public class Player {
 
 	/**
 	 * Method to move a player to a new board position
-	 *
 	 * @param playerBoardPosition - the player's new board position
 	 */
 	public void setPlayerBoardPosition(int playerBoardPosition) {

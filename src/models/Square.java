@@ -1,7 +1,7 @@
-package src.models;
+package models;
 
 /**
- *
+ * Square class creates an object required to run the game
  */
 public class Square 
 {
@@ -10,24 +10,22 @@ public class Square
  
     /**
      * Constructor for objects of class Square
-     * 
      */
     public Square(){
     	
     }
 
     /**
-     *
-     * This method lets user know whether its a Hare,Tortise,Carrot,Lettuce or Number Square
+     * Getter method to know whether it's a Hare, Tortoise, Carrot, Lettuce or Number Square
      * @return the type of square
-     * 
+     *
      */
     public String getSquareType() {
         return squareType;
     }
 
     /**
-     * Allows to set the type of square
+     * Allows the board constructor to set the type of square
      * @param squareType the type of square
      */
     public void setSquareType(String squareType) {
@@ -35,7 +33,7 @@ public class Square
     }
 
     /**
-     * Returns if there another player currently occupying a certain square
+     * Getter for if there is a player currently occupying square
      * @return if the square is occupied or not
      */
     public boolean isOccupied() {
@@ -43,7 +41,7 @@ public class Square
     }
 
     /**
-     * Allows the user to set if the square is occupied or not
+     * Sets a square to occupied or unoccupied
      * @param isOccupied is the square occupied or not
      */
     public void setOccupied(boolean isOccupied) {
@@ -51,9 +49,9 @@ public class Square
     }
 
     /**
-     * Allows the user to see what the square type is and
+     * Creates a string of the square type is and
      * whether it is occupied or not
-     * @return a string version of the square object .the square type and the current occupied status
+     * @return a string version of the square object; the square type and the current occupied status
      */
     public String toString() {
     	String occupied = "";
