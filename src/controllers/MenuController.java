@@ -643,7 +643,7 @@ class MenuController {
 				break;
 			case 2: //message on next turn, player can't move, moves to next player
 				playerToMove.chewALettuce();
-				System.out.println("Hares eat their shit, wait another turn");
+				System.out.println("Hares do love their lettuce!! Wait another turn");
 				skipTurn();
 				break;
 			case 3: //finishes the move as per game rules
